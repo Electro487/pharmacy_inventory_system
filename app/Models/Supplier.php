@@ -6,18 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Category extends Model
+class Supplier extends Model
 {
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name',
-        'description',
+        'company',
+        'phone',
+        'email',
+        'address',
         'status',
     ];
-
-    public function medicines()
-    {
-        return $this->hasMany(Medicine::class);
-    }
 }

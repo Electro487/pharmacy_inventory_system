@@ -23,7 +23,7 @@ class CategoryController extends Controller
 
     public function index()
     {
-        $categories = Category::latest()->paginate(10);
+        $categories = $this->categoryService->getAll();
         return view('categories.index', compact('categories'));
     }
 
