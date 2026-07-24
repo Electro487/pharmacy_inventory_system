@@ -13,7 +13,14 @@ return new class extends Migration
     {
         Schema::create('purchases', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('supplier_id')->constrained()->restrictOnDelete();
+            $table->string('invoice_no')->nullable();
+            $table->date('purchase_date');
+            $table->decimal('total_amount',12,2)->default(0);
+            $table->text('remarks')->nullable();
+            $table->boolean('status')->default(true);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

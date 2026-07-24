@@ -6,21 +6,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Supplier extends Model
+class Customer extends Model
 {
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name',
-        'company',
         'phone',
         'email',
         'address',
         'status',
     ];
 
-    public function purchases()
+    public function sales()
     {
-        return $this->hasMany(Purchase::class);
+        return $this->hasMany(Sale::class);
     }
 }

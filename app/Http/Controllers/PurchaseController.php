@@ -3,15 +3,28 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Supplier;
+use App\Models\Medicine;
+use App\Services\PurchaseService;
+use App\Http\Requests\StorePurchaseRequest;
 
 class PurchaseController extends Controller
 {
+    protected PurchaseService  $purchaseService;
+
+    public function __construct(PurchaseService $purchaseService)
+    {
+        $this->purchaseService = $purchaseService;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $purchases = $this->purchaseService->getAll();
+
+        return view('purchases.index', compact('purchases'));
     }
 
     /**
@@ -19,15 +32,25 @@ class PurchaseController extends Controller
      */
     public function create()
     {
-        //
+        $suppliers = Supplier::where('status', true)->orderBy('name')->get();
+        $medicines = Medicine::where('status', true)->orderBy('name')->get();
+
+        return view('purchases.create', compact(
+            'suppliers',
+            'medicines'
+        ));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StorePurchaseRequest $request)
     {
-        //
+        $this->purchaseService->create($request->validated());
+
+        return redirect()
+            ->route('purchases.index')
+            ->with('success', 'Purchase created successfully.');
     }
 
     /**

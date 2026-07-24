@@ -13,6 +13,14 @@ return new class extends Migration
     {
         Schema::create('purchase_items', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('purchase_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('medicine_id')->constrained()->restrictOnDelete();
+            $table->integer('quantity');
+            $table->decimal('purchase_price',10,2);
+            $table->decimal('selling_price',10,2);
+            $table->decimal('subtotal',12,2);
+            $table->string('batch_no')->nullable();
+            $table->date('expiry_date')->nullable();
             $table->timestamps();
         });
     }

@@ -6,27 +6,38 @@
     <title>@yield('title', 'Pharmacy')</title>
 </head>
 <body>
-    @if(auth()->check())
+   @if(auth()->check())
+    <div>
+        Logged in as {{ auth()->user()->name }}
 
-        <div>
-            Logged in as {{ auth()->user()->name }}
+        <form action="{{ route('logout') }}" method="POST" style="display:inline;">
+            @csrf
+            <button type="submit">Logout</button>
+        </form>
+    </div>
+@endif
 
-            <form action="{{ route('logout') }}" method="POST" style="display:inline;">
-                @csrf
-                <button type="submit">Logout</button>
-            </form>
-        </div>
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
 
-    @endif
+@if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
 
-    @if(session('success'))
-        <div>{{ session('success') }}</div>
-    @endif
+@if($errors->any())
+    <div class="alert alert-danger">
+        <ul style="margin:0; padding-left:20px;">
+            @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
-    @if(session('error'))
-        <div>{{ session('error') }}</div>
-    @endif
-
-    @yield('content')
-</body>
+@yield('content')</body>
 </html>

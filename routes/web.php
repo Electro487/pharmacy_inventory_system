@@ -7,6 +7,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\CustomerController;    
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +26,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('units', UnitController::class);
     Route::resource('medicines', MedicineController::class);
     Route::resource('suppliers', SupplierController::class);
+    Route::resource('purchases', PurchaseController::class);
+    Route::resource('customers', CustomerController::class);
 });
 
 Route::get('/login', [AuthController::class, 'create'])->name('login');
