@@ -5,7 +5,7 @@
 @section('content')
 <h2>Customers</h2>
 
-<a href="{{ route('customers.create') }}">Add Customer</a>
+
 
 <table border="1">
     <thead>

@@ -1,19 +1,15 @@
 @extends('layouts.app')
 
-@section('title', 'Create Supplier')
+@section('title', 'Customer Register')
 
 @section('content')
-<h2>Create Supplier</h2>
+<h2>Register</h2>
 
-<form action="{{ route('suppliers.store') }}" method="POST">
+<form action="{{ route('customer.register.store') }}" method="POST">
     @csrf
         <div>
         <label for="name">Name</label>
         <input type="text" name="name" id="name" value="{{ old('name') }}">
-        </div>
-        <div>
-        <label for="company">Company</label>
-        <input type="text" name="company" id="company" value="{{ old('company') }}">
         </div>
         <div>
         <label for="phone">Phone</label>
@@ -24,16 +20,20 @@
         <input type="email" name="email" id="email" value="{{ old('email') }}">
         </div>
         <div>
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password">
+        </div>
+        <div>
+        <label for="password_confirmation">Confirm Password</label>
+        <input type="password" name="password_confirmation" id="password_confirmation">
+        </div>
+        <div>
         <label for="address">Address</label>
         <textarea name="address" id="address">{{ old('address') }}</textarea>
         </div>
-        <div>
-        <label for="status">Status</label>
-        <input type="checkbox" name="status" id="status" value="1" {{ old('status', true) ? 'checked' : '' }}>
-    </div>
 
-    <button type="submit">Create</button>
+    <button type="submit">Register</button>
 </form>
 
-<a href="{{ route('suppliers.index') }}">Back</a>
+<a href="{{ route('customer.login') }}">Already have an account? Login</a>
 @endsection

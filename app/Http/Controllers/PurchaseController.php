@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Supplier;
 use App\Models\Medicine;
+use App\Models\Purchase;
 use App\Services\PurchaseService;
 use App\Http\Requests\StorePurchaseRequest;
 
@@ -56,9 +57,9 @@ class PurchaseController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Purchase $purchase)
     {
-        //
+        return view('purchases.show', compact('purchase'));
     }
 
     /**

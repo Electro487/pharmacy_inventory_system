@@ -25,11 +25,18 @@ class UpdateMedicineRequest extends FormRequest
         return [
             'category_id' => 'required|exists:categories,id',
             'unit_id' => 'required|exists:units,id',
-            'name' => 'required|string|max:255',
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('medicines')
+                    ->ignore($this->route('medicine'))
+                    ->where(function ($query) {
+                        return $query->where('brand', request('brand'));
+                    }),
+            ],
             'generic_name' => 'nullable|string|max:255',
             'brand' => 'nullable|string|max:255',
-            'selling_price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
             'reorder_level' => 'required|integer|min:0',
             'description' => 'nullable|string',
             'status' => 'nullable|boolean',

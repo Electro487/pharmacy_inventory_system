@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreCustomerRequest;
 use App\Http\Requests\UpdateCustomerRequest;
 use App\Models\Customer;
 use App\Services\CustomerService;
@@ -20,17 +19,6 @@ class CustomerController extends Controller
     {
         $customers = $this->customerService->getAll();
         return view('customers.index', compact('customers'));
-    }
-
-    public function create()
-    {
-        return view('customers.create');
-    }
-
-    public function store(StoreCustomerRequest $request)
-    {
-        $this->customerService->create($request->validated());
-        return redirect()->route('customers.index')->with('success', 'Customer created successfully.');
     }
 
     public function edit(Customer $customer)

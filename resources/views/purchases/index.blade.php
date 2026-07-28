@@ -17,6 +17,7 @@
             <th>Purchase Date</th>
             <th>Total</th>
             <th>Remarks</th>
+            <th>Actions</th>
         </tr>
     </thead>
 
@@ -29,10 +30,13 @@
                 <td>{{ $purchase->purchase_date }}</td>
                 <td>{{ number_format($purchase->total_amount, 2) }}</td>
                 <td>{{ $purchase->remarks ?? '-' }}</td>
+                <td>
+                    <a href="{{ route('purchases.show', $purchase) }}">View</a>
+                </td>
             </tr>
         @empty
             <tr>
-                <td colspan="6">No purchases found.</td>
+                <td colspan="7">No purchases found.</td>
             </tr>
         @endforelse
     </tbody>

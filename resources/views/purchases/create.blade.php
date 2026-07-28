@@ -95,9 +95,9 @@
                         type="number"
                         name="purchase_price[]"
                         class="purchase-price"
-                        value="0"
+                        value="0.01"
                         step="0.01"
-                        min="0">
+                        min="0.01">
                 </td>
 
                 <td>
@@ -105,9 +105,9 @@
                         type="number"
                         name="selling_price[]"
                         class="selling-price"
-                        value="0"
+                        value="0.01"
                         step="0.01"
-                        min="0">
+                        min="0.01">
                 </td>
 
                 <td>

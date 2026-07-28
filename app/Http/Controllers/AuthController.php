@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\LoginRequest;
 use App\Services\AuthService;
+use Illuminate\Support\Facades\Auth;
 
 
 class AuthController extends Controller
@@ -18,9 +19,14 @@ class AuthController extends Controller
 
     public function create()
     {
-        if (auth()->check()) {
+        if (Auth::guard('web')->check()) {
             return redirect()->route('categories.index');
         }
+
+        if (Auth::guard('customer')->check()) {
+            return redirect()->route('customer.dashboard');
+        }
+
         return view('auth.login');
     }
 
@@ -40,7 +46,7 @@ class AuthController extends Controller
         return redirect()->route('categories.index');
     }
 
-    public function destroy()
+    public function destroy(Request $request)
     {
         $this->authService->logout();
         $request->session()->invalidate();

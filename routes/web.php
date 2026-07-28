@@ -8,7 +8,8 @@ use App\Http\Controllers\UnitController;
 use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\PurchaseController;
-use App\Http\Controllers\CustomerController;    
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\CustomerAuthController;    
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +30,22 @@ Route::middleware('auth')->group(function () {
     Route::resource('purchases', PurchaseController::class);
     Route::resource('customers', CustomerController::class);
 });
+
+Route::prefix('customer')
+    ->name('customer.')
+    ->group(function () {
+        Route::middleware('guest:customer')->group(function () {
+            Route::get('/register', [CustomerAuthController::class, 'showRegister'])->name('register');
+            Route::post('/register', [CustomerAuthController::class, 'register'])->name('register.store');
+            Route::get('/login', [CustomerAuthController::class, 'showLogin'])->name('login');
+            Route::post('/login', [CustomerAuthController::class, 'login'])->name('login.store');
+        });
+
+        Route::middleware('auth:customer')->group(function () {
+            Route::post('/logout', [CustomerAuthController::class, 'logout'])->name('logout');
+            Route::get('/dashboard', [CustomerAuthController::class, 'dashboard'])->name('dashboard');
+        });
+    });
 
 Route::get('/login', [AuthController::class, 'create'])->name('login');
 Route::post('/login', [AuthController::class, 'store'])->name('login.store');

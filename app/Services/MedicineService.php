@@ -15,6 +15,9 @@ class MedicineService
 
     public function create(array $data): Medicine
     {
+        $data['selling_price'] = 0;
+        $data['stock'] = 0;
+
         return Medicine::create($data);
     }
 

@@ -9,29 +9,14 @@
 
     <div>
         <label>Email</label>
-        <input
-            type="email"
-            name="email"
-            value="{{ old('email') }}"
-        >
-
-        @error('email')
-            <span>{{ $message }}</span>
-        @enderror
+        <input type="email" name="email" value="{{ old('email') }}">
     </div>
-
+    
     <br>
 
     <div>
         <label>Password</label>
-        <input
-            type="password"
-            name="password"
-        >
-
-        @error('password')
-            <span>{{ $message }}</span>
-        @enderror
+        <input type="password" name="password">
     </div>
 
     <br>
