@@ -19,6 +19,12 @@ class PurchaseService
     public function create(array $data): Purchase
     {
         return DB::transaction(function () use ($data) {
+            $duplicates = array_count_values($data['medicine_id']);
+            foreach ($duplicates as $medicineId => $count) {
+                if ($count > 1) {
+                    throw new Exception('The same medicine cannot be added twice.');
+                }
+            }
 
             $total = 0;
 
@@ -30,9 +36,20 @@ class PurchaseService
                 $total += $subtotal;
             }
 
+            // Generate Invoice Number
+            $lastPurchase = Purchase::latest()->first();
+
+            if (!$lastPurchase) {
+                $invoiceNo = 'PUR-000001';
+            } else {
+                $number = (int) str_replace('PUR-', '', $lastPurchase->invoice_no);
+                $number++;
+                $invoiceNo = 'PUR-' . str_pad($number, 6, '0', STR_PAD_LEFT);
+            }
+
             $purchase = Purchase::create([
                 'supplier_id' => $data['supplier_id'],
-                'invoice_no' => $data['invoice_no'],
+                'invoice_no' => $invoiceNo,
                 'purchase_date' => $data['purchase_date'],
                 'total_amount' => $total,
                 'remarks' => $data['remarks'] ?? null,

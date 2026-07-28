@@ -1,26 +1,32 @@
 @extends('layouts.app')
-@section('title', 'Create Purchase')
+@section('title', 'Create Sale')
 @section('content')
-<h2>Create Purchase</h2>
+<h2>Create Sale</h2>
 
-<form action="{{ route('purchases.store') }}" method="POST">
+<form action="{{ route('sales.store') }}" method="POST">
     @csrf
 
     <div>
-        <label>Supplier</label>
-        <select name="supplier_id">
-            <option value="">Select Supplier</option>
-            @foreach($suppliers as $supplier)
-                <option value="{{ $supplier->id }}" {{ old('supplier_id') == $supplier->id ? 'selected' : '' }}>
-                    {{ $supplier->name }}
+        <label>Customer</label>
+        <select name="customer_id">
+            <option value="">Select Customer</option>
+            @foreach($customers as $customer)
+                <option value="{{ $customer->id }}" {{ old('customer_id') == $customer->id ? 'selected' : '' }}>
+                    {{ $customer->name }}
                 </option>
             @endforeach
         </select>
+        @error('customer_id')
+            <span>{{ $message }}</span>
+        @enderror
     </div>
 
     <div>
-        <label>Purchase Date</label>
-        <input type="date" name="purchase_date" value="{{ old('purchase_date', date('Y-m-d')) }}">
+        <label>Sale Date</label>
+        <input type="date" name="sale_date" value="{{ old('sale_date', date('Y-m-d')) }}">
+        @error('sale_date')
+            <span>{{ $message }}</span>
+        @enderror
     </div>
 
     <div>
@@ -35,26 +41,23 @@
             <tr>
                 <th>Medicine</th>
                 <th>Quantity</th>
-                <th>Purchase Price</th>
                 <th>Selling Price</th>
-                <th>Batch</th>
-                <th>Expiry</th>
+                <th>Subtotal</th>
                 <th>Action</th>
             </tr>
         </thead>
-        <tbody id="purchase-items">
+        <tbody id="sale-items">
         </tbody>
     </table>
 
     <h3>Total: <span id="grand-total">0.00</span></h3>
 
-    <button type="submit">Save Purchase</button>
+    <button type="submit">Save Sale</button>
 </form>
-
 
 <script>
     const medicines = @json($medicines);
-    const tbody = document.getElementById('purchase-items');
+    const tbody = document.getElementById('sale-items');
     const addRowButton = document.getElementById('add-row');
     const grandTotal = document.getElementById('grand-total');
 
@@ -64,8 +67,8 @@
 
         medicines.forEach(function (medicine) {
             options += `
-                <option value="${medicine.id}">
-                    ${medicine.name}
+                <option value="${medicine.id}" data-price="${medicine.selling_price}">
+                    ${medicine.name} (${medicine.brand}) [${medicine.stock} in stock]
                 </option>
             `;
         });
@@ -73,7 +76,7 @@
         const row = `
             <tr>
                 <td>
-                    <select name="medicine_id[]">
+                    <select name="medicine_id[]" class="medicine-select">
                         ${options}
                     </select>
                 </td>
@@ -88,61 +91,41 @@
                 <td>
                     <input
                         type="number"
-                        name="purchase_price[]"
-                        class="purchase-price"
-                        value="0.01"
-                        step="0.01"
-                        min="0.01">
-                </td>
-
-                <td>
-                    <input
-                        type="number"
                         name="selling_price[]"
                         class="selling-price"
-                        value="0.01"
+                        value="0"
                         step="0.01"
-                        min="0.01">
+                        min="0"
+                        readonly>
                 </td>
-
-                <td>
-                    <input
-                        type="text"
-                        name="batch_no[]">
-                </td>
-
-                <td>
-                    <input
-                        type="date"
-                        name="expiry_date[]">
-                </td>
-
                 <td class="subtotal">
                     0.00
                 </td>
-
                 <td>
-                    <button
-                        type="button"
-                        class="remove-row">
-                        Remove
-                    </button>
+                    <button type="button" class="remove-row">Remove</button>
                 </td>
-
             </tr>
             `;
         tbody.insertAdjacentHTML('beforeend', row);
 
         const currentRow = tbody.lastElementChild;
 
+        const medicineSelect = currentRow.querySelector('.medicine-select');
         const quantity = currentRow.querySelector('.quantity');
-        const purchasePrice = currentRow.querySelector('.purchase-price');
+        const sellingPrice = currentRow.querySelector('.selling-price');
+
+        medicineSelect.addEventListener('change', function () {
+            const selectedOption = this.options[this.selectedIndex];
+            const price = parseFloat(selectedOption.dataset.price) || 0;
+            sellingPrice.value = price.toFixed(2);
+            calculateRow(currentRow);
+        });
 
         quantity.addEventListener('input', function () {
             calculateRow(currentRow);
         });
 
-        purchasePrice.addEventListener('input', function () {
+        sellingPrice.addEventListener('input', function () {
             calculateRow(currentRow);
         });
 
@@ -157,11 +140,11 @@
 
     function calculateRow(row) {
         const quantity = row.querySelector('.quantity');
-        const purchasePrice = row.querySelector('.purchase-price');
+        const sellingPrice = row.querySelector('.selling-price');
         const subtotal = row.querySelector('.subtotal');
 
         const qty = Number(quantity.value);
-        const price = Number(purchasePrice.value);
+        const price = Number(sellingPrice.value);
 
         const total = qty * price;
 
@@ -193,7 +176,6 @@
 
         calculateGrandTotal();
     });
-
 </script>
 
 @endsection

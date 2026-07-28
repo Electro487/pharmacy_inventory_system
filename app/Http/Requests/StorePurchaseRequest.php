@@ -22,7 +22,6 @@ class StorePurchaseRequest extends FormRequest
         return [
             // Purchase Header
             'supplier_id' => 'required|exists:suppliers,id',
-            'invoice_no' => 'nullable|string|max:255',
             'purchase_date' => 'required|date',
             'remarks' => 'nullable|string|max:1000',
 
