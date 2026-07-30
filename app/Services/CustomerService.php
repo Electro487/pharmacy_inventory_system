@@ -30,9 +30,9 @@ class CustomerService
         return Customer::create($data);
     }
 
-    public function login(array $credentials): bool
+    public function login(array $credentials, bool $remember = false): bool
     {
-        return Auth::guard('customer')->attempt($credentials, false);
+        return Auth::guard('customer')->attempt($credentials, $remember);
     }
 
     public function logout(): void

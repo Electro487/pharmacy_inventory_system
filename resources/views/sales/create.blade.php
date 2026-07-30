@@ -6,9 +6,9 @@
 <form action="{{ route('sales.store') }}" method="POST">
     @csrf
 
-    <div>
+    <div class="form-group">
         <label>Customer</label>
-        <select name="customer_id">
+        <select name="customer_id" class="form-select">
             <option value="">Select Customer</option>
             @foreach($customers as $customer)
                 <option value="{{ $customer->id }}" {{ old('customer_id') == $customer->id ? 'selected' : '' }}>
@@ -21,22 +21,22 @@
         @enderror
     </div>
 
-    <div>
+    <div class="form-group">
         <label>Sale Date</label>
-        <input type="date" name="sale_date" value="{{ old('sale_date', date('Y-m-d')) }}">
+        <input type="date" name="sale_date" value="{{ old('sale_date', date('Y-m-d')) }}" class="form-input">
         @error('sale_date')
             <span>{{ $message }}</span>
         @enderror
     </div>
 
-    <div>
+    <div class="form-group">
         <label>Remarks</label>
-        <textarea name="remarks">{{ old('remarks') }}</textarea>
+        <textarea name="remarks" class="form-input">{{ old('remarks') }}</textarea>
     </div>
 
-    <button type="button" id="add-row">Add Medicine</button>
+    <button type="button" id="add-row" class="btn btn-primary btn-sm">Add Medicine</button>
 
-    <table border="1">
+    <table>
         <thead>
             <tr>
                 <th>Medicine</th>
@@ -52,7 +52,7 @@
 
     <h3>Total: <span id="grand-total">0.00</span></h3>
 
-    <button type="submit">Save Sale</button>
+    <button type="submit" class="btn btn-primary">Save Sale</button>
 </form>
 
 <script>
@@ -76,7 +76,7 @@
         const row = `
             <tr>
                 <td>
-                    <select name="medicine_id[]" class="medicine-select">
+                    <select name="medicine_id[]" class="medicine-select form-select">
                         ${options}
                     </select>
                 </td>
@@ -84,7 +84,7 @@
                     <input
                         type="number"
                         name="quantity[]"
-                        class="quantity"
+                        class="quantity form-input"
                         value="1"
                         min="1">
                 </td>
@@ -92,7 +92,7 @@
                     <input
                         type="number"
                         name="selling_price[]"
-                        class="selling-price"
+                        class="selling-price form-input"
                         value="0"
                         step="0.01"
                         min="0"
@@ -102,7 +102,7 @@
                     0.00
                 </td>
                 <td>
-                    <button type="button" class="remove-row">Remove</button>
+                    <button type="button" class="btn btn-danger btn-sm remove-row">Remove</button>
                 </td>
             </tr>
             `;

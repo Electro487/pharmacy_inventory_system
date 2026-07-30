@@ -5,9 +5,7 @@
 @section('content')
 <h2>Customers</h2>
 
-
-
-<table border="1">
+<table>
     <thead>
         <tr>
             <th>ID</th>
@@ -29,11 +27,11 @@
             <td>{{ $customer->address ?? 'N/A' }}</td>
             <td>{{ $customer->status ? 'Active' : 'Inactive' }}</td>
             <td>
-                <a href="{{ route('customers.edit', $customer->id) }}">Edit</a>
+                <a href="{{ route('customers.edit', $customer->id) }}" class="btn btn-secondary btn-sm">Edit</a>
                 <form action="{{ route('customers.destroy', $customer->id) }}" method="POST" style="display:inline;">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" onclick="return confirm('Are you sure you want to delete this customer?')">Delete</button>
+                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this customer?')">Delete</button>
                 </form>
             </td>
         </tr>

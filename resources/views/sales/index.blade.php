@@ -3,12 +3,11 @@
 @section('title', 'Sales')
 
 @section('content')
-
 <h2>Sales</h2>
 
-<a href="{{ route('sales.create') }}">Create Sale</a>
+<a href="{{ route('sales.create') }}" class="btn btn-primary">Create Sale</a>
 
-<table border="1">
+<table>
     <thead>
         <tr>
             <th>ID</th>
@@ -30,7 +29,7 @@
                 <td>{{ number_format($sale->total_amount, 2) }}</td>
                 <td>{{ $sale->payment_status ?? 'Pending' }}</td>
                 <td>
-                    <a href="{{ route('sales.show', $sale) }}">View</a>
+                    <a href="{{ route('sales.show', $sale) }}" class="btn btn-secondary btn-sm">View</a>
                 </td>
             </tr>
         @empty

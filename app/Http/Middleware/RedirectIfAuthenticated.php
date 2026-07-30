@@ -26,7 +26,7 @@ class RedirectIfAuthenticated
                     return redirect()->route('customer.dashboard');
                 }
 
-                return redirect()->route('categories.index');
+                return redirect()->route('dashboard');
             }
         }
 

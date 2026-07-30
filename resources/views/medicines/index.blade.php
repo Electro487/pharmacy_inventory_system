@@ -5,9 +5,9 @@
 @section('content')
 <h2>Medicines</h2>
 
-<a href="{{ route('medicines.create') }}">Add Medicine</a>
+<a href="{{ route('medicines.create') }}" class="btn btn-primary">Add Medicine</a>
 
-<table border="1">
+<table>
     <thead>
         <tr>
             <th>ID</th>
@@ -37,11 +37,11 @@
             <td>{{ $medicine->reorder_level }}</td>
             <td>{{ $medicine->status ? 'Active' : 'Inactive' }}</td>
             <td>
-                <a href="{{ route('medicines.edit', $medicine->id) }}">Edit</a>
+                <a href="{{ route('medicines.edit', $medicine->id) }}" class="btn btn-secondary btn-sm">Edit</a>
                 <form action="{{ route('medicines.destroy', $medicine->id) }}" method="POST" style="display:inline;">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
                 </form>
             </td>
         </tr>

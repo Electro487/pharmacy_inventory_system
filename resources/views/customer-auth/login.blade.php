@@ -3,29 +3,46 @@
 @section('title', 'Customer Login')
 
 @section('content')
-<h2>Login</h2>
 
-<form action="{{ route('customer.login.store') }}" method="POST">
-    @csrf
-        <div>
-        <label for="email">Email</label>
-        <input type="email" name="email" id="email" value="{{ old('email') }}">
-        </div>
-        <div>
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password">
-        </div>
-        <div>
-        <label for="remember">Remember me</label>
-        <input type="checkbox" name="remember" id="remember">
+<div class="auth-container">
+    <div class="auth-header">
+        <h1>Customer Login</h1>
+        <p>Enter your credentials to access your account</p>
     </div>
 
-    <button type="submit">Login</button>
-</form>
+    <form class="auth-form" action="{{ route('customer.login.store') }}" method="POST">
+        @csrf
 
-@if(session('error'))
-    <div>{{ session('error') }}</div>
-@endif
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" value="{{ old('email') }}" class="form-input" autocomplete="email">
+            @error('email')
+                <span style="color:#dc2626; font-size:0.85rem;">{{ $message }}</span>
+            @enderror
+        </div>
 
-<a href="{{ route('customer.register') }}">Don't have an account? Register</a>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" class="form-input" autocomplete="current-password">
+            @error('password')
+                <span style="color:#dc2626; font-size:0.85rem;">{{ $message }}</span>
+            @enderror
+        </div>
+
+        <div class="form-group compact">
+            <label for="remember" style="margin:0; cursor:pointer;">
+                <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}> Remember me
+            </label>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary" style="width:100%;">Login</button>
+        </div>
+    </form>
+
+    <div class="auth-footer">
+        Don't have an account? <a href="{{ route('customer.register') }}">Register</a>
+    </div>
+</div>
+
 @endsection

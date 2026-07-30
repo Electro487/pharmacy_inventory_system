@@ -20,7 +20,7 @@ class CustomerAuthController extends Controller
     public function showRegister()
     {
         if (Auth::guard('web')->check()) {
-            return redirect()->route('categories.index');
+            return redirect()->route('dashboard');
         }
 
         if (Auth::guard('customer')->check()) {
@@ -41,7 +41,7 @@ class CustomerAuthController extends Controller
     public function showLogin()
     {
         if (Auth::guard('web')->check()) {
-            return redirect()->route('categories.index');
+            return redirect()->route('dashboard');
         }
 
         if (Auth::guard('customer')->check()) {
@@ -53,8 +53,9 @@ class CustomerAuthController extends Controller
     public function login(LoginCustomerRequest $request)
     {
         $credentials = $request->only('email', 'password') + ['status' => true];
+        $remember = $request->boolean('remember');
 
-        if ($this->customerService->login($credentials)) {
+        if ($this->customerService->login($credentials, $remember)) {
             $request->session()->regenerate();
             return redirect()->route('customer.dashboard')->with('success', 'Welcome back!');
         }

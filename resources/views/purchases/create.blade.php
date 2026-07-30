@@ -6,9 +6,9 @@
 <form action="{{ route('purchases.store') }}" method="POST">
     @csrf
 
-    <div>
+    <div class="form-group">
         <label>Supplier</label>
-        <select name="supplier_id">
+        <select name="supplier_id" class="form-select">
             <option value="">Select Supplier</option>
             @foreach($suppliers as $supplier)
                 <option value="{{ $supplier->id }}" {{ old('supplier_id') == $supplier->id ? 'selected' : '' }}>
@@ -18,19 +18,19 @@
         </select>
     </div>
 
-    <div>
+    <div class="form-group">
         <label>Purchase Date</label>
-        <input type="date" name="purchase_date" value="{{ old('purchase_date', date('Y-m-d')) }}">
+        <input type="date" name="purchase_date" value="{{ old('purchase_date', date('Y-m-d')) }}" class="form-input">
     </div>
 
-    <div>
+    <div class="form-group">
         <label>Remarks</label>
-        <textarea name="remarks">{{ old('remarks') }}</textarea>
+        <textarea name="remarks" class="form-input">{{ old('remarks') }}</textarea>
     </div>
 
-    <button type="button" id="add-row">Add Medicine</button>
+    <button type="button" id="add-row" class="btn btn-secondary">Add Medicine</button>
 
-    <table border="1">
+    <table>
         <thead>
             <tr>
                 <th>Medicine</th>
@@ -39,6 +39,7 @@
                 <th>Selling Price</th>
                 <th>Batch</th>
                 <th>Expiry</th>
+                <th>Subtotal</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -48,9 +49,8 @@
 
     <h3>Total: <span id="grand-total">0.00</span></h3>
 
-    <button type="submit">Save Purchase</button>
+    <button type="submit" class="btn">Save Purchase</button>
 </form>
-
 
 <script>
     const medicines = @json($medicines);
@@ -73,7 +73,7 @@
         const row = `
             <tr>
                 <td>
-                    <select name="medicine_id[]">
+                    <select name="medicine_id[]" class="form-select">
                         ${options}
                     </select>
                 </td>
@@ -81,7 +81,7 @@
                     <input
                         type="number"
                         name="quantity[]"
-                        class="quantity"
+                        class="quantity form-input"
                         value="1"
                         min="1">
                 </td>
@@ -89,7 +89,7 @@
                     <input
                         type="number"
                         name="purchase_price[]"
-                        class="purchase-price"
+                        class="purchase-price form-input"
                         value="0.01"
                         step="0.01"
                         min="0.01">
@@ -99,7 +99,7 @@
                     <input
                         type="number"
                         name="selling_price[]"
-                        class="selling-price"
+                        class="selling-price form-input"
                         value="0.01"
                         step="0.01"
                         min="0.01">
@@ -108,13 +108,15 @@
                 <td>
                     <input
                         type="text"
-                        name="batch_no[]">
+                        name="batch_no[]"
+                        class="form-input">
                 </td>
 
                 <td>
                     <input
                         type="date"
-                        name="expiry_date[]">
+                        name="expiry_date[]"
+                        class="form-input">
                 </td>
 
                 <td class="subtotal">
@@ -124,7 +126,7 @@
                 <td>
                     <button
                         type="button"
-                        class="remove-row">
+                        class="btn btn-danger btn-sm remove-row">
                         Remove
                     </button>
                 </td>
@@ -193,7 +195,6 @@
 
         calculateGrandTotal();
     });
-
 </script>
 
 @endsection

@@ -5,9 +5,9 @@
 @section('content')
 <h2>Units</h2>
 
-<a href="{{ route('units.create') }}">Add Unit</a>
+<a href="{{ route('units.create') }}" class="btn btn-primary">Add Unit</a>
 
-<table border="1">
+<table>
     <thead>
         <tr>
             <th>ID</th>
@@ -25,11 +25,11 @@
             <td>{{ $unit->description ?? 'N/A' }}</td>
             <td>{{ $unit->status ? 'Active' : 'Inactive' }}</td>
             <td>
-                <a href="{{ route('units.edit', $unit->id) }}">Edit</a>
+                <a href="{{ route('units.edit', $unit->id) }}" class="btn btn-secondary btn-sm">Edit</a>
                 <form action="{{ route('units.destroy', $unit->id) }}" method="POST" style="display:inline;">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" onclick="return confirm('Are you sure you want to delete this unit?')">Delete</button>
+                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this unit?')">Delete</button>
                 </form>
             </td>
         </tr>

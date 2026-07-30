@@ -63,5 +63,5 @@
 
 <br>
 
-<a href="{{ route('sales.index') }}">Back</a>
+<a href="{{ route('sales.index') }}" class="btn btn-secondary btn-sm">Back</a>
 @endsection

@@ -20,7 +20,7 @@ class AuthController extends Controller
     public function create()
     {
         if (Auth::guard('web')->check()) {
-            return redirect()->route('categories.index');
+            return redirect()->route('dashboard');
         }
 
         if (Auth::guard('customer')->check()) {
@@ -33,8 +33,9 @@ class AuthController extends Controller
     public function store(LoginRequest $request)
     {
         $credentials = $request->validated();
+        $remember = $request->boolean('remember');
 
-        if (! $this->authService->login($credentials)) {
+        if (! $this->authService->login($credentials, $remember)) {
             return back()
                 ->withErrors([
                     'email' => 'Invalid email or password.',
@@ -43,7 +44,7 @@ class AuthController extends Controller
         }
 
         $request->session()->regenerate();
-        return redirect()->route('categories.index');
+        return redirect()->route('dashboard');
     }
 
     public function destroy(Request $request)

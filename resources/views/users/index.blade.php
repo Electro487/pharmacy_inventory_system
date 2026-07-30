@@ -5,9 +5,9 @@
 @section('content')
 <h2>Users</h2>
 
-<a href="{{ route('users.create') }}">Add User</a>
+<a href="{{ route('users.create') }}" class="btn btn-primary">Add User</a>
 
-<table border="1">
+<table>
     <thead>
         <tr>
             <th>ID</th>
@@ -27,11 +27,11 @@
             <td>{{ $user->email }}</td>
             <td>{{ $user->status ? 'Active' : 'Inactive' }}</td>
             <td>
-                <a href="{{ route('users.edit', $user->id) }}">Edit</a>
-                <form action="{{ route('users.destroy', $user->id) }}" method="POST">
+                <a href="{{ route('users.edit', $user->id) }}" class="btn btn-secondary btn-sm">Edit</a>
+                <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display:inline;">
                     @csrf
                     @method('DELETE')
-                    <button onclick="return confirm('Delete this user?')">Delete</button>
+                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Delete this user?')">Delete</button>
                 </form>
             </td>
         </tr>

@@ -7,33 +7,52 @@
 
 <form action="{{ route('users.store') }}" method="POST">
     @csrf
-        <div>
-        <label>Role</label>
-        <select name="role_id">
+
+    <div class="form-group">
+        <label for="role_id">Role</label>
+        <select name="role_id" id="role_id">
             @foreach($roles as $role)
                 <option value="{{ $role->id }}" {{ old('role_id') == $role->id ? 'selected' : '' }}>
                     {{ $role->name }}
                 </option>
             @endforeach
         </select>
-        </div>
-        <div>
-        <label>Name</label>
-        <input type="text" name="name" value="{{ old('name') }}">
-        </div>
-        <div>
-        <label>Email</label>
-        <input type="email" name="email" value="{{ old('email') }}">
-        </div>
-        <div>
-        <label>Password</label>
-        <input type="password" name="password">
-        </div>
-        <div>
-        <label>Status</label>
-        <input type="checkbox" name="status" value="1" {{ old('status', true) ? 'checked' : '' }}>
+        @error('role_id')
+            <span style="color:#dc2626; font-size:0.85rem;">{{ $message }}</span>
+        @enderror
     </div>
 
-    <button>Create</button>
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" name="name" id="name" value="{{ old('name') }}">
+        @error('name')
+            <span style="color:#dc2626; font-size:0.85rem;">{{ $message }}</span>
+        @enderror
+    </div>
+
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" value="{{ old('email') }}">
+        @error('email')
+            <span style="color:#dc2626; font-size:0.85rem;">{{ $message }}</span>
+        @enderror
+    </div>
+
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password">
+        @error('password')
+            <span style="color:#dc2626; font-size:0.85rem;">{{ $message }}</span>
+        @enderror
+    </div>
+
+    <div class="form-group">
+        <label for="status">Status</label>
+        <input type="checkbox" name="status" id="status" value="1" {{ old('status', true) ? 'checked' : '' }}>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
 </form>
+
+<a href="{{ route('users.index') }}" class="btn btn-secondary btn-sm">Back</a>
 @endsection

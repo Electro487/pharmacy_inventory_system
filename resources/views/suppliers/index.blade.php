@@ -5,9 +5,9 @@
 @section('content')
 <h2>Suppliers</h2>
 
-<a href="{{ route('suppliers.create') }}">Add Supplier</a>
+<a href="{{ route('suppliers.create') }}" class="btn btn-primary">Add Supplier</a>
 
-<table border="1">
+<table>
     <thead>
         <tr>
             <th>ID</th>
@@ -31,11 +31,11 @@
             <td>{{ $supplier->address ?? 'N/A' }}</td>
             <td>{{ $supplier->status ? 'Active' : 'Inactive' }}</td>
             <td>
-                <a href="{{ route('suppliers.edit', $supplier->id) }}">Edit</a>
+                <a href="{{ route('suppliers.edit', $supplier->id) }}" class="btn btn-secondary btn-sm">Edit</a>
                 <form action="{{ route('suppliers.destroy', $supplier->id) }}" method="POST" style="display:inline;">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" onclick="return confirm('Are you sure you want to delete this supplier?')">Delete</button>
+                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this supplier?')">Delete</button>
                 </form>
             </td>
         </tr>

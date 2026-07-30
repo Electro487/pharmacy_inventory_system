@@ -9,38 +9,49 @@
     @csrf
     @method('PUT')
 
-    <div>
-        <label>Role</label>
-        <select name="role_id">
+    <div class="form-group">
+        <label for="role_id">Role</label>
+        <select name="role_id" id="role_id">
             @foreach($roles as $role)
                 <option value="{{ $role->id }}" {{ old('role_id', $user->role_id) == $role->id ? 'selected' : '' }}>
                     {{ $role->name }}
                 </option>
             @endforeach
         </select>
+        @error('role_id')
+            <span style="color:#dc2626; font-size:0.85rem;">{{ $message }}</span>
+        @enderror
     </div>
 
-    <div>
-        <label>Name</label>
-        <input type="text" name="name" value="{{ old('name', $user->name) }}">
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" name="name" id="name" value="{{ old('name', $user->name) }}">
+        @error('name')
+            <span style="color:#dc2626; font-size:0.85rem;">{{ $message }}</span>
+        @enderror
     </div>
 
-    <div>
-        <label>Email</label>
-        <input type="email" name="email" value="{{ old('email', $user->email) }}">
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" value="{{ old('email', $user->email) }}">
+        @error('email')
+            <span style="color:#dc2626; font-size:0.85rem;">{{ $message }}</span>
+        @enderror
     </div>
 
-    <div>
-        <label>Password</label>
-        <input type="password" name="password">
-        <small>Leave blank to keep current password.</small>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password">
+        <small style="color:#666;">Leave blank to keep current password.</small>
     </div>
 
-    <div>
-        <label>Status</label>
-        <input type="checkbox" name="status" value="1" {{ old('status', $user->status) ? 'checked' : '' }}>
+    <div class="form-group">
+        <label for="status">Status</label>
+        <input type="checkbox" name="status" id="status" value="1" {{ old('status', $user->status) ? 'checked' : '' }}>
     </div>
 
-    <button>Update</button>
+    <button type="submit" class="btn btn-primary">Update</button>
 </form>
+
+<a href="{{ route('users.index') }}" class="btn btn-secondary btn-sm">Back</a>
 @endsection

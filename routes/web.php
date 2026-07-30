@@ -11,6 +11,7 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomerAuthController;    
 use App\Http\Controllers\SaleController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,7 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('medicines', MedicineController::class);
     Route::resource('suppliers', SupplierController::class);
     Route::resource('purchases', PurchaseController::class);
-    Route::resource('customers', CustomerController::class);
+    Route::resource('customers', CustomerController::class)->except(['create', 'store']);
     Route::resource('sales', SaleController::class);
 });
 
@@ -48,6 +49,10 @@ Route::prefix('customer')
             Route::get('/dashboard', [CustomerAuthController::class, 'dashboard'])->name('dashboard');
         });
     });
+
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware('auth')
+    ->name('dashboard');
 
 Route::get('/login', [AuthController::class, 'create'])->name('login');
 Route::post('/login', [AuthController::class, 'store'])->name('login.store');

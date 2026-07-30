@@ -7,9 +7,10 @@
 
 <form action="{{ route('medicines.store') }}" method="POST">
     @csrf
-        <div>
-        <label>Category</label>
-        <select name="category_id">
+
+    <div class="form-group">
+        <label for="category_id">Category</label>
+        <select name="category_id" id="category_id">
             <option value="">Select Category</option>
             @foreach($categories as $category)
                 <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
@@ -17,10 +18,14 @@
                 </option>
             @endforeach
         </select>
-        </div>
-        <div>
-        <label>Unit</label>
-        <select name="unit_id">
+        @error('category_id')
+            <span style="color:#dc2626; font-size:0.85rem;">{{ $message }}</span>
+        @enderror
+    </div>
+
+    <div class="form-group">
+        <label for="unit_id">Unit</label>
+        <select name="unit_id" id="unit_id">
             <option value="">Select Unit</option>
             @foreach($units as $unit)
                 <option value="{{ $unit->id }}" {{ old('unit_id') == $unit->id ? 'selected' : '' }}>
@@ -28,34 +33,49 @@
                 </option>
             @endforeach
         </select>
-        </div>
-        <div>
-        <label>Name</label>
-        <input type="text" name="name" value="{{ old('name') }}">
-        </div>
-        <div>
-        <label>Generic Name</label>
-        <input type="text" name="generic_name" value="{{ old('generic_name') }}">
-        </div>
-        <div>
-        <label>Brand</label>
-        <input type="text" name="brand" value="{{ old('brand') }}">
-        </div>
-        <div>
-        <label>Reorder Level</label>
-        <input type="number" name="reorder_level" value="{{ old('reorder_level', 10) }}">
-        </div>
-        <div>
-        <label>Description</label>
-        <textarea name="description">{{ old('description') }}</textarea>
-        </div>
-        <div>
-        <label>Status</label>
-        <input type="checkbox" name="status" value="1" {{ old('status', true) ? 'checked' : '' }}>
+        @error('unit_id')
+            <span style="color:#dc2626; font-size:0.85rem;">{{ $message }}</span>
+        @enderror
     </div>
 
-    <button type="submit">Create</button>
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" name="name" id="name" value="{{ old('name') }}">
+        @error('name')
+            <span style="color:#dc2626; font-size:0.85rem;">{{ $message }}</span>
+        @enderror
+    </div>
+
+    <div class="form-group">
+        <label for="generic_name">Generic Name</label>
+        <input type="text" name="generic_name" id="generic_name" value="{{ old('generic_name') }}">
+    </div>
+
+    <div class="form-group">
+        <label for="brand">Brand</label>
+        <input type="text" name="brand" id="brand" value="{{ old('brand') }}">
+    </div>
+
+    <div class="form-group">
+        <label for="reorder_level">Reorder Level</label>
+        <input type="number" name="reorder_level" id="reorder_level" value="{{ old('reorder_level', 10) }}" min="0">
+        @error('reorder_level')
+            <span style="color:#dc2626; font-size:0.85rem;">{{ $message }}</span>
+        @enderror
+    </div>
+
+    <div class="form-group">
+        <label for="description">Description</label>
+        <textarea name="description" id="description">{{ old('description') }}</textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="status">Status</label>
+        <input type="checkbox" name="status" id="status" value="1" {{ old('status', true) ? 'checked' : '' }}>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
 </form>
 
-<a href="{{ route('medicines.index') }}">Back</a>
+<a href="{{ route('medicines.index') }}" class="btn btn-secondary btn-sm">Back</a>
 @endsection
