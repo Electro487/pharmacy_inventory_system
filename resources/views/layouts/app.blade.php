@@ -21,9 +21,7 @@
             </span>
             <form action="{{ route('logout') }}" method="POST">
                 @csrf
-                <button type="submit" class="btn-link">
-                    Logout
-                </button>
+                <button type="submit" class="btn-link">Logout</button>
             </form>
         </div>
     </header>
@@ -36,6 +34,7 @@
                     <li><a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">Dashboard</a></li>
                     <li><a href="{{ route('users.index') }}" class="{{ request()->routeIs('users.*') ? 'active' : '' }}">Users</a></li>
                     <li><a href="{{ route('categories.index') }}" class="{{ request()->routeIs('categories.*') ? 'active' : '' }}">Categories</a></li>
+                    <li><a href="{{ route('units.index') }}" class="{{ request()->routeIs('units.*') ? 'active' : '' }}">Units</a></li>
                     <li><a href="{{ route('medicines.index') }}" class="{{ request()->routeIs('medicines.*') ? 'active' : '' }}">Medicines</a></li>
                     <li><a href="{{ route('suppliers.index') }}" class="{{ request()->routeIs('suppliers.*') ? 'active' : '' }}">Suppliers</a></li>
                     <li><a href="{{ route('customers.index') }}" class="{{ request()->routeIs('customers.*') ? 'active' : '' }}">Customers</a></li>
@@ -47,6 +46,7 @@
                     <li><a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">Dashboard</a></li>
                     <li><a href="{{ route('medicines.index') }}" class="{{ request()->routeIs('medicines.*') ? 'active' : '' }}">Medicines</a></li>
                     <li><a href="{{ route('categories.index') }}" class="{{ request()->routeIs('categories.*') ? 'active' : '' }}">Categories</a></li>
+                    <li><a href="{{ route('units.index') }}" class="{{ request()->routeIs('units.*') ? 'active' : '' }}">Units</a></li>
                     <li><a href="{{ route('suppliers.index') }}" class="{{ request()->routeIs('suppliers.*') ? 'active' : '' }}">Suppliers</a></li>
                     <li><a href="{{ route('customers.index') }}" class="{{ request()->routeIs('customers.*') ? 'active' : '' }}">Customers</a></li>
                     <li><a href="{{ route('purchases.index') }}" class="{{ request()->routeIs('purchases.*') ? 'active' : '' }}">Purchases</a></li>
@@ -63,21 +63,35 @@
         </aside>
 
         <main class="main-content">
+            @if(session('success'))
+                <div class="alert alert-success">{{ session('success') }}</div>
+            @endif
+            @if(session('error'))
+                <div class="alert alert-danger">{{ session('error') }}</div>
+            @endif
+            @if($errors->any())
+                <div class="alert alert-danger">
+                    <ul style="margin:0; padding-left:20px;">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            @yield('content')
+        </main>
+    </div>
+
 @elseif(auth()->guard('customer')->check())
     <header>
         <div class="header-left">
             <h1>Pharmacy Management System</h1>
         </div>
         <div class="header-right">
-            <span>
-                Welcome,
-                <strong>{{ auth()->guard('customer')->user()->name }}</strong>
-            </span>
+            <span>Welcome, <strong>{{ auth()->guard('customer')->user()->name }}</strong></span>
             <form action="{{ route('customer.logout') }}" method="POST">
                 @csrf
-                <button type="submit" class="btn-link">
-                    Logout
-                </button>
+                <button type="submit" class="btn-link">Logout</button>
             </form>
         </div>
     </header>
@@ -91,21 +105,12 @@
         </aside>
 
         <main class="main-content">
-@else
-        <main class="main-content auth-page">
-@endif
             @if(session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
-                </div>
+                <div class="alert alert-success">{{ session('success') }}</div>
             @endif
-
             @if(session('error'))
-                <div class="alert alert-danger">
-                    {{ session('error') }}
-                </div>
+                <div class="alert alert-danger">{{ session('error') }}</div>
             @endif
-
             @if($errors->any())
                 <div class="alert alert-danger">
                     <ul style="margin:0; padding-left:20px;">
@@ -115,11 +120,31 @@
                     </ul>
                 </div>
             @endif
-
             @yield('content')
         </main>
-    @if(auth()->guard('web')->check() || auth()->guard('customer')->check())
     </div>
+
+@else
+    <main class="main-content auth-page">
+        <div class="auth-page-wrapper">
+            @if(session('success'))
+                <div class="alert alert-success">{{ session('success') }}</div>
+            @endif
+            @if(session('error'))
+                <div class="alert alert-danger">{{ session('error') }}</div>
+            @endif
+            @if($errors->any())
+                <div class="alert alert-danger">
+                    <ul style="margin:0; padding-left:20px;">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            @yield('content')
+        </div>
+    </main>
 @endif
 
 </body>

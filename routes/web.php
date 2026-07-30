@@ -23,15 +23,29 @@ use App\Http\Controllers\DashboardController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::middleware('auth')->group(function () {
-    Route::resource('categories', CategoryController::class);
-    Route::resource('users', UserController::class);
-    Route::resource('units', UnitController::class);
-    Route::resource('medicines', MedicineController::class);
-    Route::resource('suppliers', SupplierController::class);
-    Route::resource('purchases', PurchaseController::class);
-    Route::resource('customers', CustomerController::class)->except(['create', 'store']);
-    Route::resource('sales', SaleController::class);
+Route::middleware(['auth'])->group(function () {
+    // Dashboard Page for all staff users (Admin, Pharmacist, Cashier)
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Admin Only
+    Route::middleware('role:Admin')->group(function () {
+        Route::resource('users', UserController::class);
+    });
+
+    // Admin + Pharmacist
+    Route::middleware('role:Admin,Pharmacist')->group(function () {
+        Route::resource('categories', CategoryController::class);
+        Route::resource('units', UnitController::class);
+        Route::resource('medicines', MedicineController::class);
+        Route::resource('suppliers', SupplierController::class);
+        Route::resource('purchases', PurchaseController::class);
+    });
+
+    // Everyone (Admin, Pharmacist, Cashier)
+    Route::middleware('role:Admin,Pharmacist,Cashier')->group(function () {
+        Route::resource('customers', CustomerController::class)->except(['create', 'store']);
+        Route::resource('sales', SaleController::class);
+    });
 });
 
 Route::prefix('customer')
@@ -49,10 +63,6 @@ Route::prefix('customer')
             Route::get('/dashboard', [CustomerAuthController::class, 'dashboard'])->name('dashboard');
         });
     });
-
-Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->middleware('auth')
-    ->name('dashboard');
 
 Route::get('/login', [AuthController::class, 'create'])->name('login');
 Route::post('/login', [AuthController::class, 'store'])->name('login.store');

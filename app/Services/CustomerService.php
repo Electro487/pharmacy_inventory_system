@@ -32,6 +32,7 @@ class CustomerService
 
     public function login(array $credentials, bool $remember = false): bool
     {
+        unset($credentials['remember']);
         return Auth::guard('customer')->attempt($credentials, $remember);
     }
 

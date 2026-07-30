@@ -19,9 +19,6 @@
                 </option>
             @endforeach
         </select>
-        @error('category_id')
-            <span style="color:#dc2626; font-size:0.85rem;">{{ $message }}</span>
-        @enderror
     </div>
 
     <div class="form-group">
@@ -34,17 +31,11 @@
                 </option>
             @endforeach
         </select>
-        @error('unit_id')
-            <span style="color:#dc2626; font-size:0.85rem;">{{ $message }}</span>
-        @enderror
     </div>
 
     <div class="form-group">
         <label for="name">Name</label>
         <input type="text" name="name" id="name" value="{{ old('name', $medicine->name) }}">
-        @error('name')
-            <span style="color:#dc2626; font-size:0.85rem;">{{ $message }}</span>
-        @enderror
     </div>
 
     <div class="form-group">
@@ -60,9 +51,6 @@
     <div class="form-group">
         <label for="reorder_level">Reorder Level</label>
         <input type="number" name="reorder_level" id="reorder_level" value="{{ old('reorder_level', $medicine->reorder_level) }}" min="0">
-        @error('reorder_level')
-            <span style="color:#dc2626; font-size:0.85rem;">{{ $message }}</span>
-        @enderror
     </div>
 
     <div class="form-group">

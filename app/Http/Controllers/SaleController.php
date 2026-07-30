@@ -8,6 +8,7 @@ use App\Models\Medicine;
 use App\Services\SaleService;
 use App\Http\Requests\StoreSaleRequest;
 use App\Models\Sale;
+use Illuminate\Support\Facades\Auth;
 use Exception;
 
 class SaleController extends Controller
@@ -22,7 +23,7 @@ class SaleController extends Controller
      */
     public function index()
     {
-        $sales = $this->saleService->getAll();
+        $sales = $this->saleService->getAll(Auth::user());
         return view('sales.index', compact('sales'));
     }
 

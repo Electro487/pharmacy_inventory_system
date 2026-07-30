@@ -18,25 +18,16 @@
                 </option>
             @endforeach
         </select>
-        @error('role_id')
-            <span style="color:#dc2626; font-size:0.85rem;">{{ $message }}</span>
-        @enderror
     </div>
 
     <div class="form-group">
         <label for="name">Name</label>
         <input type="text" name="name" id="name" value="{{ old('name', $user->name) }}">
-        @error('name')
-            <span style="color:#dc2626; font-size:0.85rem;">{{ $message }}</span>
-        @enderror
     </div>
 
     <div class="form-group">
         <label for="email">Email</label>
         <input type="email" name="email" id="email" value="{{ old('email', $user->email) }}">
-        @error('email')
-            <span style="color:#dc2626; font-size:0.85rem;">{{ $message }}</span>
-        @enderror
     </div>
 
     <div class="form-group">

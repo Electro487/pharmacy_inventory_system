@@ -8,6 +8,7 @@ class AuthService
 {
     public function login(array $credentials, bool $remember = false): bool
     {
+        unset($credentials['remember']);
         return Auth::attempt($credentials, $remember);
     }
     

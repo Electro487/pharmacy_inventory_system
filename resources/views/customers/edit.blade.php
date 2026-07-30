@@ -12,9 +12,6 @@
     <div class="form-group">
         <label for="name">Name</label>
         <input type="text" name="name" id="name" value="{{ old('name', $customer->name) }}">
-        @error('name')
-            <span style="color:#dc2626; font-size:0.85rem;">{{ $message }}</span>
-        @enderror
     </div>
 
     <div class="form-group">

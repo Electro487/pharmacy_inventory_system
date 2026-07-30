@@ -16,7 +16,7 @@ class LoginCustomerRequest extends FormRequest
         return [
             'email' => 'required|email',
             'password' => 'required|string',
-            'remember' => 'nullable|boolean',
+            'remember' => 'nullable|in:true,false,on,1,0',
         ];
     }
 

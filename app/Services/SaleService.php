@@ -5,17 +5,20 @@ namespace App\Services;
 use App\Models\Sale;
 use App\Models\SaleItem;
 use App\Models\Medicine;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Exception;
 
 class SaleService
 {
-    public function getAll()
+    public function getAll(User $user)
     {
-        return Sale::with(['customer', 'user'])
-            ->latest()
-            ->paginate(10);
+        $query = Sale::with(['customer', 'user']);
+        if ($user->isCashier()) {
+            $query->where('user_id', $user->id);
+        }
+        return $query->latest()->paginate(10);
     }
 
     public function create(array $data): Sale

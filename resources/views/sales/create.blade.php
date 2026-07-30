@@ -16,17 +16,11 @@
                 </option>
             @endforeach
         </select>
-        @error('customer_id')
-            <span>{{ $message }}</span>
-        @enderror
     </div>
 
     <div class="form-group">
         <label>Sale Date</label>
         <input type="date" name="sale_date" value="{{ old('sale_date', date('Y-m-d')) }}" class="form-input">
-        @error('sale_date')
-            <span>{{ $message }}</span>
-        @enderror
     </div>
 
     <div class="form-group">
