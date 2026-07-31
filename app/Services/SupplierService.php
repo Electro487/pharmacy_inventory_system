@@ -8,7 +8,7 @@ class SupplierService
 {
     public function getAll()
     {
-        return Supplier::latest()->paginate(10);
+        return Supplier::latest()->paginate(10);//customPagination 
     }
 
     public function create(array $data): Supplier

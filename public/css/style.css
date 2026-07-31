@@ -531,3 +531,200 @@ aside a:hover {
     display: block;
     width: 100%;
 }
+
+
+/* ==================================================
+   SALE DETAILS PAGE
+================================================== */
+
+
+
+.sale-invoice {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.invoice-header {
+    border-bottom: 2px solid var(--aqua-dark);
+    padding-bottom: 20px;
+    margin-bottom: 24px;
+}
+
+.invoice-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 16px;
+}
+
+.invoice-title h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    color: var(--aqua-dark);
+}
+
+.invoice-number {
+    background: var(--aqua-base);
+    color: var(--aqua-dark);
+    padding: 6px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
+}
+
+.invoice-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    padding: 16px;
+    background: var(--aqua-base);
+    border-radius: 8px;
+}
+
+.invoice-meta div {
+    display: flex;
+    gap: 8px;
+}
+
+.invoice-meta strong {
+    color: var(--aqua-dark);
+    min-width: 100px;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-paid {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-cancelled {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.invoice-table-container {
+    overflow-x: auto;
+    margin-bottom: 24px;
+}
+
+.invoice-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.invoice-table th,
+.invoice-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--cream-border);
+}
+
+.invoice-table th {
+    background: var(--aqua-base);
+    color: var(--aqua-dark);
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.invoice-table .text-center {
+    text-align: center;
+}
+
+.invoice-table .text-right {
+    text-align: right;
+}
+
+.invoice-table tbody tr:hover {
+    background: var(--aqua-base);
+}
+
+.invoice-table tfoot .grand-total-row {
+    background: var(--aqua-dark);
+    color: var(--cream-white);
+}
+
+.invoice-table tfoot .grand-total-amount {
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.invoice-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    padding-top: 16px;
+    border-top: 1px solid var(--cream-border);
+}
+
+@media print {
+
+    .invoice-actions,
+    header,
+    aside,
+    .btn-link {
+        display: none !important;
+    }
+
+    .main-content {
+        padding: 0 !important;
+    }
+
+    .sale-invoice {
+        max-width: none;
+        padding: 0;
+    }
+
+    .invoice-header {
+        border-bottom: 2px solid #0F766E !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .invoice-number {
+        background: #E7F3F1 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .invoice-meta {
+        background: #E7F3F1 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .status-paid {
+        background: #DCFCE7 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .invoice-table th {
+        background: #E7F3F1 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .invoice-table tfoot .grand-total-row {
+        background: #0F766E !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}

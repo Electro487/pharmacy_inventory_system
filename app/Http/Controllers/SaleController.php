@@ -43,10 +43,10 @@ class SaleController extends Controller
     public function store(StoreSaleRequest $request)
     {
         try { 
-            $this->saleService->create($request->validated());
+            $sale = $this->saleService->create($request->validated());
 
             return redirect()
-                ->route('sales.index')
+                ->route('sales.show', $sale)
                 ->with('success', 'Sale created successfully.');
 
         } catch (Exception $e) {
@@ -63,6 +63,12 @@ class SaleController extends Controller
      */
     public function show(Sale $sale)
     {
+        $sale = $this->saleService->getById($sale->id);
+
+        if (auth()->user()->isCashier() && $sale->user_id !== auth()->id()) {
+            abort(403);
+        }
+
         return view('sales.show', compact('sale'));
     }
 

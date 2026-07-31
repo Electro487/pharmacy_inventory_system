@@ -8,6 +8,7 @@ use App\Models\Medicine;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Customer;
 use Exception;
 
 class SaleService
@@ -19,6 +20,19 @@ class SaleService
             $query->where('user_id', $user->id);
         }
         return $query->latest()->paginate(10);
+    }
+
+    public function getById(int $id): Sale
+    {
+        return Sale::with(['customer', 'user', 'items.medicine'])
+            ->findOrFail($id);
+    }
+
+    public function getCustomerSales(Customer $customer)
+    {
+        return Sale::where('customer_id', $customer->id)
+            ->latest()
+            ->paginate(10);
     }
 
     public function create(array $data): Sale
@@ -34,8 +48,8 @@ class SaleService
             $total = 0;
             foreach ($data['medicine_id'] as $index => $medicineId) {
                 $quantity = $data['quantity'][$index];
-                $sellingPrice = $data['selling_price'][$index];
                 $medicine = Medicine::findOrFail($medicineId);
+                $sellingPrice = $medicine->selling_price;
 
                 if ($medicine->stock < $quantity) {
                     throw new Exception("Insufficient stock for {$medicine->name}.");
@@ -70,13 +84,14 @@ class SaleService
 
                 $medicine = Medicine::findOrFail($medicineId);
                 $quantity = $data['quantity'][$index];
-                $subtotal = $quantity * $data['selling_price'][$index];
+                $sellingPrice = $medicine->selling_price;
+                $subtotal = $quantity * $sellingPrice;
 
                 SaleItem::create([
                     'sale_id' => $sale->id,
                     'medicine_id' => $medicineId,
                     'quantity' => $quantity,
-                    'selling_price' => $data['selling_price'][$index],
+                    'selling_price' => $sellingPrice,
                     'subtotal' => $subtotal,
                 ]);
 

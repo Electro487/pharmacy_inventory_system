@@ -15,9 +15,9 @@ class RegisterCustomerRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'phone' => 'nullable|string|max:20',
+            'phone' => 'nullable|string|max:20', //regex
             'email' => 'required|email|max:255|unique:customers,email',
-            'password' => 'required|confirmed|min:8',
+            'password' => 'required|confirmed|min:8',//regex
             'address' => 'nullable|string|max:1000',
         ];
     }

@@ -12,6 +12,8 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomerAuthController;    
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\CustomerDashboardController;
+use App\Http\Controllers\CustomerOrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -60,7 +62,9 @@ Route::prefix('customer')
 
         Route::middleware('auth:customer')->group(function () {
             Route::post('/logout', [CustomerAuthController::class, 'logout'])->name('logout');
-            Route::get('/dashboard', [CustomerAuthController::class, 'dashboard'])->name('dashboard');
+            Route::get('/dashboard', [CustomerDashboardController::class, 'dashboard'])->name('dashboard');
+            Route::get('/orders', [CustomerOrderController::class, 'index'])->name('orders.index');
+            Route::get('/orders/{sale}', [CustomerOrderController::class, 'show'])->name('orders.show');
         });
     });
 

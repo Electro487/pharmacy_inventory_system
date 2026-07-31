@@ -75,8 +75,4 @@ class CustomerAuthController extends Controller
         return redirect()->route('customer.login')->with('success', 'Logged out successfully.');
     }
 
-    public function dashboard()
-    {
-        return view('customer-auth.dashboard');
-    }
 }

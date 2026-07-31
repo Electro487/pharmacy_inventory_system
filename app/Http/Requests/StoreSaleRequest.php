@@ -24,8 +24,6 @@ class StoreSaleRequest extends FormRequest
             'quantity' => 'required|array|min:1',
             'quantity.*' => 'required|integer|min:1',
 
-            'selling_price' => 'required|array|min:1',
-            'selling_price.*' => 'required|numeric|min:0.01',
         ];
     }
 
@@ -40,9 +38,6 @@ class StoreSaleRequest extends FormRequest
 
             'quantity.*.required' => 'Please enter the quantity.',
             'quantity.*.min' => 'Quantity must be greater than 0.',
-
-            'selling_price.*.required' => 'Please enter the selling price.',
-            'selling_price.*.min' => 'Selling price must be greater than 0.',
         ];
     }
 }

@@ -84,8 +84,7 @@
                 </td>
                 <td>
                     <input
-                        type="number"
-                        name="selling_price[]"
+                        type="text"
                         class="selling-price form-input"
                         value="0"
                         step="0.01"
@@ -119,10 +118,6 @@
             calculateRow(currentRow);
         });
 
-        sellingPrice.addEventListener('input', function () {
-            calculateRow(currentRow);
-        });
-
         calculateRow(currentRow);
     }
 
@@ -137,8 +132,8 @@
         const sellingPrice = row.querySelector('.selling-price');
         const subtotal = row.querySelector('.subtotal');
 
-        const qty = Number(quantity.value);
-        const price = Number(sellingPrice.value);
+        const qty = parseFloat(quantity.value) || 0;
+        const price = parseFloat(sellingPrice.value) || 0;
 
         const total = qty * price;
 
