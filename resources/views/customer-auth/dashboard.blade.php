@@ -6,12 +6,22 @@
 
 <div class="dashboard-grid">
     <div class="dashboard-card">
+        <h3>🛒 Browse Medicines</h3>
+        <p>Shop for available medicines.</p>
+        <a href="{{ route('customer.medicines') }}" class="btn btn-secondary btn-sm">Browse</a>
+    </div>
+    <div class="dashboard-card">
+        <h3>🛍 My Cart</h3>
+        <p>View and manage your cart.</p>
+        <a href="{{ route('customer.cart') }}" class="btn btn-secondary btn-sm">View Cart</a>
+    </div>
+    <div class="dashboard-card">
         <h3>📦 My Orders</h3>
         <h2>{{ $dashboard['totalOrders'] }}</h2>
         <p>Total orders placed.</p>
         <a href="{{ route('customer.orders.index') }}" class="btn btn-secondary btn-sm">
-                View Orders
-            </a>
+            View Orders
+        </a>
     </div>
     <div class="dashboard-card">
         <h3>💰 Total Spent</h3>
@@ -36,19 +46,23 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($dashboard['recentOrders'] as $sale)
+@foreach($dashboard['recentOrders'] as $order)
             <tr>
-                <td>{{ $sale->invoice_no }}</td>
-                <td>{{ $sale->sale_date }}</td>
-                <td>Rs. {{ number_format($sale->total_amount, 2) }}</td>
-                <td>{{ ucfirst($sale->payment_status) }}</td>
+                <td>{{ $order->order_no }}</td>
+                <td>{{ $order->order_date }}</td>
+                <td>Rs. {{ number_format($order->total_amount, 2) }}</td>
                 <td>
-                    <a href="{{ route('customer.orders.show', $sale) }}" class="btn btn-secondary btn-sm">
+                    <span class="status-badge status-{{ $order->status }}">
+                        {{ ucfirst($order->status) }}
+                    </span>
+                </td>
+                <td>
+                    <a href="{{ route('customer.orders.show', $order) }}" class="btn btn-secondary btn-sm">
                         View
                     </a>
                 </td>
             </tr>
-            @endforeach
+        @endforeach
         </tbody>
     </table>
 </div>

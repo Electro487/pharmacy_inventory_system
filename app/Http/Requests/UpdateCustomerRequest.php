@@ -16,7 +16,7 @@ class UpdateCustomerRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'phone' => 'nullable|string|max:20',
+            'phone' => 'nullable|string|max:20|regex:/^\+?[0-9\s\-\(\)]{7,20}$/',
             'email' => ['required', 'email', 'max:255', Rule::unique('customers')->ignore($this->route('customer'))],
             'address' => 'nullable|string|max:1000',
             'status' => 'nullable|boolean',

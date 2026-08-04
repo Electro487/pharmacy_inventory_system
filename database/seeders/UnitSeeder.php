@@ -8,12 +8,9 @@ use App\Models\Unit;
 
 class UnitSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        $units = [
+        Unit::create(
             ['name' => 'Tablet',  'description' => 'Tablet',  'status' => true],
             ['name' => 'Capsule', 'description' => 'Capsule', 'status' => true],
             ['name' => 'Bottle',  'description' => 'Bottle',  'status' => true],
@@ -23,9 +20,6 @@ class UnitSeeder extends Seeder
             ['name' => 'Ampoule', 'description' => 'Ampoule', 'status' => true],
             ['name' => 'Packet',  'description' => 'Packet', 'status' => true],
             ['name' => 'Box',     'description' => 'Box', 'status' => true],
-        ];
-        foreach ($units as $unit) {
-            Unit::create($unit);
-        }
+        );
     }
 }

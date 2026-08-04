@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Sale;
+use App\Models\Order;
 use App\Services\CustomerOrderService;
 
 class CustomerOrderController extends Controller
@@ -23,11 +23,11 @@ class CustomerOrderController extends Controller
         return view('customer-orders.index', compact('orders'));
     }
 
-    public function show(Sale $sale)
+    public function show(Order $order)
     {
         $customer = auth('customer')->user();
-        $sale = $this->customerOrderService->getOrder($customer, $sale->id);
+        $order = $this->customerOrderService->getOrder($customer, $order->id);
 
-        return view('customer-orders.show', compact('sale'));
+        return view('customer-orders.show', compact('order'));
     }
 }

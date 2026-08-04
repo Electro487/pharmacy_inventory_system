@@ -5,8 +5,6 @@
 @section('content')
 <h2>Sales</h2>
 
-<a href="{{ route('sales.create') }}" class="btn btn-primary">Create Sale</a>
-
 <table>
     <thead>
         <tr>

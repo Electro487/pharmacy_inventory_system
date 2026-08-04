@@ -47,11 +47,12 @@ class PurchaseController extends Controller
      */
     public function store(StorePurchaseRequest $request)
     {
-        $this->purchaseService->create($request->validated());
-
-        return redirect()
-            ->route('purchases.index')
-            ->with('success', 'Purchase created successfully.');
+        try {
+            $this->purchaseService->create($request->validated());
+            return redirect()->route('purchases.index')->with('success', 'Purchase created successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('purchases.index')->with('error', $e->getMessage());
+        }
     }
 
     /**

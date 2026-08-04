@@ -1,5 +1,7 @@
 @extends('layouts.app')
+
 @section('title', 'Order Details')
+
 @section('content')
 
 <div class="sale-invoice">
@@ -7,23 +9,23 @@
         <div class="invoice-title">
             <h1>Order Details</h1>
             <span class="invoice-number">
-                {{ $sale->invoice_no }}
+                {{ $order->order_no }}
             </span>
         </div>
         <div class="invoice-meta">
             <div>
                 <strong>Date:</strong>
-                {{ $sale->sale_date }}
+                {{ $order->order_date }}
             </div>
             <div>
-                <strong>Payment:</strong>
-                <span class="status-badge status-paid">
-                    {{ ucfirst($sale->payment_status) }}
+                <strong>Status:</strong>
+                <span class="status-badge status-{{ $order->status }}">
+                    {{ ucfirst($order->status) }}
                 </span>
             </div>
             <div>
                 <strong>Total:</strong>
-                Rs. {{ number_format($sale->total_amount, 2) }}
+                Rs. {{ number_format($order->total_amount, 2) }}
             </div>
         </div>
     </div>
@@ -46,7 +48,7 @@
                 </tr>
             </thead>
             <tbody>
-            @foreach($sale->items as $index => $item)
+            @foreach($order->items as $index => $item)
             <tr>
                 <td>
                     {{ $index + 1 }}
@@ -74,7 +76,7 @@
                         Grand Total
                     </th>
                     <th class="text-right">
-                        Rs. {{ number_format($sale->total_amount,2) }}
+                        Rs. {{ number_format($order->total_amount,2) }}
                     </th>
                 </tr>
             </tfoot>

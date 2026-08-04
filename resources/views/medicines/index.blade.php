@@ -17,6 +17,7 @@
             <th>Generic Name</th>
             <th>Brand</th>
             <th>Selling Price</th>
+            <th>Purchase Price</th>
             <th>Stock</th>
             <th>Reorder Level</th>
             <th>Status</th>
@@ -33,6 +34,7 @@
             <td>{{ $medicine->generic_name ?? 'N/A' }}</td>
             <td>{{ $medicine->brand ?? 'N/A' }}</td>
             <td>{{ $medicine->selling_price }}</td>
+            <td>{{ $medicine->purchase_price ?? 'N/A' }}</td>
             <td>{{ $medicine->stock }}</td>
             <td>{{ $medicine->reorder_level }}</td>
             <td>{{ $medicine->status ? 'Active' : 'Inactive' }}</td>
@@ -47,7 +49,7 @@
         </tr>
     @empty
         <tr>
-            <td colspan="11">No medicines found.</td>
+            <td colspan="12">No medicines found.</td>
         </tr>
     @endforelse
     </tbody>

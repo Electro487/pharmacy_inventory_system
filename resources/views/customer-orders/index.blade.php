@@ -25,16 +25,18 @@
             <tr>
                 <td>{{ $orders->firstItem() + $index }}</td>
                 <td>
-                    {{ $order->invoice_no }}
+                    {{ $order->order_no }}
                 </td>
                 <td>
-                    {{ $order->sale_date }}
+                    {{ $order->order_date }}
                 </td>
                 <td>
                     Rs. {{ number_format($order->total_amount, 2) }}
                 </td>
                 <td>
-                    {{ ucfirst($order->payment_status) }}
+                    <span class="status-badge status-{{ $order->status }}">
+                        {{ ucfirst($order->status) }}
+                    </span>
                 </td>
                 <td>
                     <a href="{{ route('customer.orders.show', $order) }}" class="btn btn-secondary btn-sm">

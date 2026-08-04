@@ -4,8 +4,8 @@ namespace App\Services;
 
 use App\Models\Sale;
 use App\Models\SaleItem;
-use App\Models\Medicine;
 use App\Models\User;
+use App\Models\Order;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Customer;
@@ -35,73 +35,61 @@ class SaleService
             ->paginate(10);
     }
 
-    public function create(array $data): Sale
+    private function generateInvoiceNumber(): string
     {
-        return DB::transaction(function () use ($data) {
-            $duplicates = array_count_values($data['medicine_id']);
-            foreach ($duplicates as $medicineId => $count) {
-                if ($count > 1) {
-                    throw new Exception('The same medicine cannot be added twice.');
-                }
+        $lastSale = Sale::latest('id')->first();
+
+        if (!$lastSale) {
+            return 'SAL-000001';
+        }
+
+        $number = (int) str_replace('SAL-', '', $lastSale->invoice_no);
+        $number++;
+
+        return 'SAL-' . str_pad($number, 6, '0', STR_PAD_LEFT);
+    }
+
+    public function createFromOrder(Order $order): Sale
+    {
+        return DB::transaction(function () use ($order) {
+            $order->load('items.medicine');
+
+            if ($order->items->isEmpty()) {
+                throw new Exception('Cannot create sale from empty order.');
             }
 
-            $total = 0;
-            foreach ($data['medicine_id'] as $index => $medicineId) {
-                $quantity = $data['quantity'][$index];
-                $medicine = Medicine::findOrFail($medicineId);
-                $sellingPrice = $medicine->selling_price;
+            $invoiceNo = $this->generateInvoiceNumber();
 
-                if ($medicine->stock < $quantity) {
-                    throw new Exception("Insufficient stock for {$medicine->name}.");
-                }
-
-                $subtotal = $quantity * $sellingPrice;
-                $total += $subtotal;
-            }
-
-            // Generate Invoice Number
-            $lastSale = Sale::latest()->first();
-
-            if (!$lastSale) {
-                $invoiceNo = 'SAL-000001';
-            } else {
-                $number = (int) str_replace('SAL-', '', $lastSale->invoice_no);
-                $number++;
-                $invoiceNo = 'SAL-' . str_pad($number, 6, '0', STR_PAD_LEFT);
-            }
-
+            // Create Sale first
             $sale = Sale::create([
-                'customer_id' => $data['customer_id'],
+                'customer_id' => $order->customer_id,
                 'user_id' => Auth::id(),
                 'invoice_no' => $invoiceNo,
-                'sale_date' => $data['sale_date'],
-                'total_amount' => $total,
+                'sale_date' => now()->toDateString(),
+                'total_amount' => $order->total_amount,
                 'payment_status' => 'paid',
-                'remarks' => $data['remarks'] ?? null,
+                'remarks' => $order->remarks,
             ]);
 
-            foreach ($data['medicine_id'] as $index => $medicineId) {
-
-                $medicine = Medicine::findOrFail($medicineId);
-                $quantity = $data['quantity'][$index];
-                $sellingPrice = $medicine->selling_price;
-                $subtotal = $quantity * $sellingPrice;
+            // Create Sale Items and deduct stock
+            foreach ($order->items as $item) {
+                $medicine = $item->medicine;
 
                 SaleItem::create([
                     'sale_id' => $sale->id,
-                    'medicine_id' => $medicineId,
-                    'quantity' => $quantity,
-                    'selling_price' => $sellingPrice,
-                    'subtotal' => $subtotal,
+                    'medicine_id' => $item->medicine_id,
+                    'quantity' => $item->quantity,
+                    'selling_price' => $item->selling_price,
+                    'subtotal' => $item->subtotal,
                 ]);
 
+                // Deduct stock AFTER sale creation
                 $medicine->update([
-                    'stock' => $medicine->stock - $quantity,
+                    'stock' => $medicine->stock - $item->quantity,
                 ]);
             }
 
-            return $sale;           
-
+            return $sale;
         });
     }
 }

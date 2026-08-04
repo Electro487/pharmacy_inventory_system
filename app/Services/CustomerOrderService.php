@@ -3,21 +3,21 @@
 namespace App\Services;
 
 use App\Models\Customer;
-use App\Models\Sale;
+use App\Models\Order;
 
 class CustomerOrderService
 {
     public function getOrders(Customer $customer)
     {
-        return $customer->sales()
+        return $customer->orders()
             ->latest()
             ->paginate(10);
     }
 
-    public function getOrder(Customer $customer, int $saleId): Sale
+    public function getOrder(Customer $customer, int $orderId): Order
     {
-        return $customer->sales()
+        return $customer->orders()
             ->with(['items.medicine'])
-            ->findOrFail($saleId);
+            ->findOrFail($orderId);
     }
 }

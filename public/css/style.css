@@ -728,3 +728,70 @@ aside a:hover {
         print-color-adjust: exact;
     }
 }
+
+/* Pagination */
+[role="navigation"][aria-label="Pagination Navigation"] {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+[role="navigation"][aria-label="Pagination Navigation"] svg {
+    width: 20px;
+    height: 20px;
+}
+
+[role="navigation"][aria-label="Pagination Navigation"] a,
+[role="navigation"][aria-label="Pagination Navigation"] span[aria-disabled="true"] > span,
+[role="navigation"][aria-label="Pagination Navigation"] span[aria-current="page"] > span {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    font-size: 14px;
+    border: 1px solid var(--cream-border);
+    background: var(--cream-white);
+    color: #555;
+    text-decoration: none;
+    transition: all 0.15s;
+}
+
+[role="navigation"][aria-label="Pagination Navigation"] a:hover {
+    background: var(--aqua-base);
+    color: var(--aqua-dark);
+}
+
+[role="navigation"][aria-label="Pagination Navigation"] span[aria-current="page"] > span {
+    background: var(--aqua-dark);
+    color: #fff;
+    border-color: var(--aqua-dark);
+    font-weight: 600;
+}
+
+[role="navigation"][aria-label="Pagination Navigation"] span[aria-disabled="true"] > span {
+    color: #aaa;
+    cursor: default;
+}
+
+[role="navigation"][aria-label="Pagination Navigation"] .flex.justify-between {
+    display: none;
+}
+
+[role="navigation"][aria-label="Pagination Navigation"] .hidden.sm\\:flex-1 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+[role="navigation"][aria-label="Pagination Navigation"] .relative.z-0.inline-flex {
+    display: inline-flex;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+[role="navigation"][aria-label="Pagination Navigation"] a:first-child span svg,
+[role="navigation"][aria-label="Pagination Navigation"] span[aria-disabled="true"]:first-child span svg {
+    margin-right: 0;
+}

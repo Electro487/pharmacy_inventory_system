@@ -9,6 +9,7 @@ use App\Models\Supplier;
 use App\Models\Customer;
 use App\Models\Purchase;
 use App\Models\Sale;
+use App\Models\Order;
 
 class DashboardService
 {
@@ -38,6 +39,7 @@ class DashboardService
             'totalSuppliers' => Supplier::count(),
             'totalCustomers' => Customer::count(),
             'totalPurchases' => Purchase::count(),
+            'totalOrders' => Order::count(),
             'totalSales' => $totalSales,
             'lowStockMedicines' => $lowStockMedicines,
             'recentSales' => $recentSales,

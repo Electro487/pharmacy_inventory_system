@@ -29,8 +29,12 @@ class SupplierController extends Controller
 
     public function store(StoreSupplierRequest $request)
     {
-        $this->supplierService->create($request->validated());
-        return redirect()->route('suppliers.index')->with('success', 'Supplier created successfully.');
+        try {
+            $this->supplierService->create($request->validated());
+            return redirect()->route('suppliers.index')->with('success', 'Supplier created successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('suppliers.index')->with('error', $e->getMessage());
+        }
     }
 
     public function edit(Supplier $supplier)
@@ -40,13 +44,21 @@ class SupplierController extends Controller
 
     public function update(UpdateSupplierRequest $request, Supplier $supplier)
     {
-        $this->supplierService->update($supplier, $request->validated());
-        return redirect()->route('suppliers.index')->with('success', 'Supplier updated successfully.');
+        try {
+            $this->supplierService->update($supplier, $request->validated());
+            return redirect()->route('suppliers.index')->with('success', 'Supplier updated successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('suppliers.index')->with('error', $e->getMessage());
+        }
     }
 
     public function destroy(Supplier $supplier)
     {
-        $this->supplierService->delete($supplier);
-        return redirect()->route('suppliers.index')->with('success', 'Supplier deleted successfully.');
+        try {
+            $this->supplierService->delete($supplier);
+            return redirect()->route('suppliers.index')->with('success', 'Supplier deleted successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('suppliers.index')->with('error', $e->getMessage());
+        }
     }
 }

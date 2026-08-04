@@ -31,9 +31,13 @@ class UserController extends Controller
 
     public function store(StoreUserRequest $request)
     {
-        $data = $request->validated();
-        $user = $this->userService->create($data);
-        return redirect()->route('users.index')->with('success', 'User created successfully.');
+        try {
+            $data = $request->validated();
+            $user = $this->userService->create($data);
+            return redirect()->route('users.index')->with('success', 'User created successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('users.index')->with('error', $e->getMessage());
+        }
     }
 
     public function edit(User $user)
@@ -44,14 +48,22 @@ class UserController extends Controller
 
     public function update(UpdateUserRequest $request, User $user)
     {
-        $data = $request->validated();
-        $this->userService->update($user, $data);
-        return redirect()->route('users.index')->with('success', 'User updated successfully.');
+        try {
+            $data = $request->validated();
+            $this->userService->update($user, $data);
+            return redirect()->route('users.index')->with('success', 'User updated successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('users.index')->with('error', $e->getMessage());
+        }
     }
 
     public function destroy(User $user)
     {
-        $this->userService->delete($user);
-        return redirect()->route('users.index')->with('success', 'User deleted successfully.');
+        try {
+            $this->userService->delete($user);
+            return redirect()->route('users.index')->with('success', 'User deleted successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('users.index')->with('error', $e->getMessage());
+        }
     }
 }

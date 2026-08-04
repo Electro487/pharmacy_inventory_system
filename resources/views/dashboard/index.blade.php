@@ -57,6 +57,14 @@
     </div>
 
     <div class="dashboard-card">
+        <h3>📋 Orders</h3>
+        <h3>{{ $dashboard['totalOrders'] }}</h3>
+        <p>View and approve orders.</p>
+
+        <a href="{{ route('orders.index') }}" class="btn btn-secondary btn-sm">Open</a>
+    </div>
+
+    <div class="dashboard-card">
         <h3>💰 Sales</h3>
         <h3>{{ $dashboard['totalSales'] }}</h3>
         <p>Create and manage sales.</p>
@@ -216,6 +224,14 @@
     </div>
 
     <div class="dashboard-card">
+        <h3>📋 Orders</h3>
+        <h3>{{ $dashboard['totalOrders'] }}</h3>
+        <p>View and approve orders.</p>
+
+        <a href="{{ route('orders.index') }}" class="btn btn-secondary btn-sm">Open</a>
+    </div>
+
+    <div class="dashboard-card">
         <h3>💰 Sales</h3>
         <h3>{{ $dashboard['totalSales'] }}</h3>
         <p>Create and manage sales.</p>
@@ -305,14 +321,7 @@
 
 <div class="dashboard-grid">
     <div class="dashboard-card">
-        <h3>💰 Create Sales</h3>
-        <p>Process a new sale.</p>
-
-        <a href="{{ route('sales.create') }}" class="btn btn-secondary btn-sm">Open</a>
-    </div>
-
-    <div class="dashboard-card">
-        <h3>📜 Sales History</h3>
+        <h3>💰 Sales</h3>
         <h3>{{ $dashboard['totalSales'] }}</h3>
         <p>View past sales.</p>
 

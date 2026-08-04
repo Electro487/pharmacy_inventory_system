@@ -36,4 +36,9 @@ class Sale extends Model
     {
         return $this->hasMany(SaleItem::class);
     }
+
+    public function order()
+    {
+        return $this->hasOne(Order::class);
+    }
 }

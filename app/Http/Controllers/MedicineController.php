@@ -35,11 +35,12 @@ class MedicineController extends Controller
 
     public function store(StoreMedicineRequest $request)
     {
-        $this->medicineService->create($request->validated());
-
-        return redirect()
-            ->route('medicines.index')
-            ->with('success', 'Medicine created successfully.');
+        try {
+            $this->medicineService->create($request->validated());
+            return redirect()->route('medicines.index')->with('success', 'Medicine created successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('medicines.index')->with('error', $e->getMessage());
+        }
     }
 
     public function edit(Medicine $medicine)
@@ -52,19 +53,21 @@ class MedicineController extends Controller
 
     public function update(UpdateMedicineRequest $request, Medicine $medicine)
     {
-        $this->medicineService->update($medicine, $request->validated());
-
-        return redirect()
-            ->route('medicines.index')
-            ->with('success', 'Medicine updated successfully.');
+        try {
+            $this->medicineService->update($medicine, $request->validated());
+            return redirect()->route('medicines.index')->with('success', 'Medicine updated successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('medicines.index')->with('error', $e->getMessage());
+        }
     }
 
     public function destroy(Medicine $medicine)
     {
-        $this->medicineService->delete($medicine);
-
-        return redirect()
-            ->route('medicines.index')
-            ->with('success', 'Medicine deleted successfully.');
+        try {
+            $this->medicineService->delete($medicine);
+            return redirect()->route('medicines.index')->with('success', 'Medicine deleted successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('medicines.index')->with('error', $e->getMessage());
+        }
     }
 }

@@ -29,9 +29,13 @@ class UnitController extends Controller
 
     public function store(StoreUnitRequest $request)
     {
-        $data = $request->validated();
-        $unit = $this->unitService->create($data);
-        return redirect()->route('units.index')->with('success', 'Unit created successfully.');
+        try {
+            $data = $request->validated();
+            $unit = $this->unitService->create($data);
+            return redirect()->route('units.index')->with('success', 'Unit created successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('units.index')->with('error', $e->getMessage());
+        }
     }
 
     public function edit(Unit $unit)
@@ -41,14 +45,22 @@ class UnitController extends Controller
 
     public function update(UpdateUnitRequest $request, Unit $unit)
     {
-        $data = $request->validated();
-        $this->unitService->update($unit, $data);
-        return redirect()->route('units.index')->with('success', 'Unit updated successfully.');
+        try {
+            $data = $request->validated();
+            $this->unitService->update($unit, $data);
+            return redirect()->route('units.index')->with('success', 'Unit updated successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('units.index')->with('error', $e->getMessage());
+        }
     }
 
     public function destroy(Unit $unit)
     {
-        $this->unitService->delete($unit);
-        return redirect()->route('units.index')->with('success', 'Unit deleted successfully.');
+        try {
+            $this->unitService->delete($unit);
+            return redirect()->route('units.index')->with('success', 'Unit deleted successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('units.index')->with('error', $e->getMessage());
+        }
     }
 }

@@ -64,4 +64,9 @@ class User extends Authenticatable
     {
         return $this->role->name === 'Cashier';
     }
+
+    public function approvedOrders()
+    {
+        return $this->hasMany(Order::class, 'approved_by');
+    }
 }

@@ -13,9 +13,7 @@ class CategorySeeder extends Seeder
             'name' => 'Pain Relief',
             'description' => 'Medications for pain relief',
             'status' => true,
-        ]);
-
-        Category::create([
+        ], [
             'name' => 'Antibiotics',
             'description' => 'Antibiotic medications',
             'status' => true,

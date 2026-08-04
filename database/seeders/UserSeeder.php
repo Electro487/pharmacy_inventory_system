@@ -16,17 +16,17 @@ class UserSeeder extends Seeder
             'email'    => 'admin@pharmacy.com',
             'password' => Hash::make('pharmacy123'),
             'status'   => true,
-        ]);
+        ],
 
-        User::create([
+        [
             'role_id'  => 2,
             'name'     => 'Pharmacist',
             'email'    => 'pharmacist@pharmacy.com',
             'password' => Hash::make('pharmacy123'),
             'status'   => true,
-        ]);
+        ],
 
-        User::create([
+       [
             'role_id'  => 3,
             'name'     => 'Cashier',
             'email'    => 'cashier@pharmacy.com',

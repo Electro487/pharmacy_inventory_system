@@ -29,9 +29,13 @@ class CategoryController extends Controller
 
     public function store(StoreCategoryRequest $request)
     {
-        $data = $request->validated();
-        $category = $this->categoryService->create($data);
-        return redirect()->route('categories.index')->with('success', 'Category created successfully.');
+        try {
+            $data = $request->validated();
+            $category = $this->categoryService->create($data);
+            return redirect()->route('categories.index')->with('success', 'Category created successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('categories.index')->with('error', $e->getMessage());
+        }
     }
 
     public function edit(Category $category)
@@ -41,14 +45,22 @@ class CategoryController extends Controller
 
     public function update(UpdateCategoryRequest $request, Category $category)
     {
-        $data = $request->validated();
-        $this->categoryService->update($category, $data);
-        return redirect()->route('categories.index')->with('success', 'Category updated successfully.');
+        try {
+            $data = $request->validated();
+            $this->categoryService->update($category, $data);
+            return redirect()->route('categories.index')->with('success', 'Category updated successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('categories.index')->with('error', $e->getMessage());
+        }
     }
 
     public function destroy(Category $category)
     {
-        $this->categoryService->delete($category);
-        return redirect()->route('categories.index')->with('success', 'Category deleted successfully.');
+        try {
+            $this->categoryService->delete($category);
+            return redirect()->route('categories.index')->with('success', 'Category deleted successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('categories.index')->with('error', $e->getMessage());
+        }
     }
 }

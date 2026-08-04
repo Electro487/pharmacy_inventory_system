@@ -9,11 +9,14 @@ use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\CustomerAuthController;    
+use App\Http\Controllers\CustomerAuthController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CustomerDashboardController;
 use App\Http\Controllers\CustomerOrderController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\Customer\CartController;
+use App\Http\Controllers\Customer\MedicineController as CustomerMedicineController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,19 +37,22 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('users', UserController::class);
     });
 
-    // Admin + Pharmacist
-    Route::middleware('role:Admin,Pharmacist')->group(function () {
-        Route::resource('categories', CategoryController::class);
-        Route::resource('units', UnitController::class);
-        Route::resource('medicines', MedicineController::class);
-        Route::resource('suppliers', SupplierController::class);
-        Route::resource('purchases', PurchaseController::class);
-    });
+// Admin + Pharmacist
+Route::middleware('role:Admin,Pharmacist')->group(function () {
+    Route::resource('categories', CategoryController::class);
+    Route::resource('units', UnitController::class);
+    Route::resource('medicines', MedicineController::class);
+    Route::resource('suppliers', SupplierController::class);
+    Route::resource('purchases', PurchaseController::class);
+    Route::resource('orders', OrderController::class)->only(['index', 'show']);
+    Route::patch('orders/{order}/approve', [OrderController::class, 'approve'])->name('orders.approve');
+    Route::patch('orders/{order}/reject', [OrderController::class, 'reject'])->name('orders.reject');
+});
 
     // Everyone (Admin, Pharmacist, Cashier)
     Route::middleware('role:Admin,Pharmacist,Cashier')->group(function () {
         Route::resource('customers', CustomerController::class)->except(['create', 'store']);
-        Route::resource('sales', SaleController::class);
+        Route::resource('sales', SaleController::class)->only(['index', 'show']);
     });
 });
 
@@ -64,7 +70,17 @@ Route::prefix('customer')
             Route::post('/logout', [CustomerAuthController::class, 'logout'])->name('logout');
             Route::get('/dashboard', [CustomerDashboardController::class, 'dashboard'])->name('dashboard');
             Route::get('/orders', [CustomerOrderController::class, 'index'])->name('orders.index');
-            Route::get('/orders/{sale}', [CustomerOrderController::class, 'show'])->name('orders.show');
+            Route::get('/orders/{order}', [CustomerOrderController::class, 'show'])->name('orders.show');
+
+            Route::get('/medicines', [CustomerMedicineController::class, 'index'])->name('medicines');
+            Route::get('/medicines/{medicine}', [CustomerMedicineController::class, 'show'])->name('medicines.show');
+
+            Route::get('/cart', [CartController::class, 'index'])->name('cart');
+            Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+            Route::delete('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
+            Route::patch('/cart/{cartItemId}', [CartController::class, 'update'])->name('cart.update');
+            Route::delete('/cart/{cartItemId}', [CartController::class, 'remove'])->name('cart.remove');
+            Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
         });
     });
 

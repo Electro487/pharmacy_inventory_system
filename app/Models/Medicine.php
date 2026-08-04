@@ -37,4 +37,20 @@ class Medicine extends Model
     {
         return $this->hasMany(PurchaseItem::class);
     }
+    
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
+    public function latestPurchasePrice()
+    {
+        return $this->hasOne(PurchaseItem::class)->latestOfMany('id');
+    }
+
+    public function getPurchasePriceAttribute()
+    {
+        $latest = $this->purchaseItems()->latest('id')->first();
+        return $latest ? $latest->purchase_price : null;
+    }
 }

@@ -6,12 +6,12 @@ class CustomerDashboardService
 {
     public function getDashboardData($customer): array
     {
-        $sales = $customer->sales()->latest();
+        $orders = $customer->orders()->latest();
 
         return [
-            'totalOrders' => $sales->count(),
-            'totalSpent' => $sales->sum('total_amount'),
-            'recentOrders' => $sales->take(5)->get(),
+            'totalOrders' => $orders->count(),
+            'totalSpent' => $customer->sales()->sum('total_amount'),
+            'recentOrders' => $orders->take(5)->get(),
         ];
     }
 }

@@ -31,11 +31,13 @@ class CustomerAuthController extends Controller
 
     public function register(RegisterCustomerRequest $request)
     {
-        $customer = $this->customerService->register($request->validated());
-
-        Auth::guard('customer')->login($customer);
-
-        return redirect()->route('customer.dashboard')->with('success', 'Registration successful!');
+        try {
+            $customer = $this->customerService->register($request->validated());
+            Auth::guard('customer')->login($customer);
+            return redirect()->route('customer.dashboard')->with('success', 'Registration successful!');
+        } catch (\Exception $e) {
+            return redirect()->route('customer.register')->with('error', $e->getMessage());
+        }
     }
 
     public function showLogin()

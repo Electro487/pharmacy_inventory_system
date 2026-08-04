@@ -28,13 +28,21 @@ class CustomerController extends Controller
 
     public function update(UpdateCustomerRequest $request, Customer $customer)
     {
-        $this->customerService->update($customer, $request->validated());
-        return redirect()->route('customers.index')->with('success', 'Customer updated successfully.');
+        try {
+            $this->customerService->update($customer, $request->validated());
+            return redirect()->route('customers.index')->with('success', 'Customer updated successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('customers.index')->with('error', $e->getMessage());
+        }
     }
 
     public function destroy(Customer $customer)
     {
-        $this->customerService->delete($customer);
-        return redirect()->route('customers.index')->with('success', 'Customer deleted successfully.');
+        try {
+            $this->customerService->delete($customer);
+            return redirect()->route('customers.index')->with('success', 'Customer deleted successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('customers.index')->with('error', $e->getMessage());
+        }
     }
 }
