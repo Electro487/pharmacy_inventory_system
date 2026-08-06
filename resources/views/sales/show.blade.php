@@ -13,7 +13,7 @@
             <div><strong>Date:</strong> {{ $sale->sale_date }}</div>
             <div><strong>Cashier:</strong> {{ $sale->user->name ?? 'N/A' }}</div>
             <div><strong>Customer:</strong> {{ $sale->customer->name }}</div>
-            <div><strong>Status:</strong> <span class="status-badge status-{{ $sale->payment_status }}">{{ ucfirst($sale->payment_status) }}</span></div>
+            <div><strong>Status:</strong> <span class="status-badge status-{{ $sale->payment_status->value }}">{{ ucfirst($sale->payment_status->value) }}</span></div>
             @if($sale->remarks)
             <div><strong>Remarks:</strong> {{ $sale->remarks }}</div>
             @endif

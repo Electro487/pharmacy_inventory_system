@@ -8,6 +8,7 @@ use App\Models\Medicine;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Enums\OrderStatus;
 use Illuminate\Support\Facades\DB;
 use Exception;
 
@@ -28,8 +29,8 @@ class CartService
     {
         $medicine = Medicine::findOrFail($medicineId);
 
-        if ($medicine->stock < $quantity) {
-            throw new Exception("Insufficient stock for {$medicine->name}.");
+        if ($medicine->available_stock < $quantity) {
+            throw new Exception("Insufficient stock for {$medicine->name}. Available: {$medicine->available_stock}, Required: {$quantity}");
         }
 
         return DB::transaction(function () use ($customer, $medicineId, $quantity) {
@@ -39,8 +40,8 @@ class CartService
 
             if ($existingItem) {
                 $newQuantity = $existingItem->quantity + $quantity;
-                if ($existingItem->medicine->stock < $newQuantity) {
-                    throw new Exception("Insufficient stock for {$existingItem->medicine->name}.");
+                if ($existingItem->medicine->available_stock < $newQuantity) {
+                    throw new Exception("Insufficient stock for {$existingItem->medicine->name}. Available: {$existingItem->medicine->available_stock}, Required: {$newQuantity}");
                 }
                 $existingItem->update(['quantity' => $newQuantity]);
                 return $existingItem->fresh();
@@ -64,8 +65,8 @@ class CartService
             $cart = $this->getCart($customer);
             $item = $cart->items()->findOrFail($cartItemId);
 
-            if ($item->medicine->stock < $quantity) {
-                throw new Exception("Insufficient stock for {$item->medicine->name}.");
+            if ($item->medicine->available_stock < $quantity) {
+                throw new Exception("Insufficient stock for {$item->medicine->name}. Available: {$item->medicine->available_stock}, Required: {$quantity}");
             }
 
             $item->update(['quantity' => $quantity]);
@@ -95,10 +96,10 @@ class CartService
                 throw new Exception('Cart is empty. Cannot checkout.');
             }
 
-            // Check stock for all items
+            // Check available stock for all items
             foreach ($cart->items as $item) {
-                if ($item->medicine->stock < $item->quantity) {
-                    throw new Exception("Insufficient stock for {$item->medicine->name}. Available: {$item->medicine->stock}, Required: {$item->quantity}");
+                if ($item->medicine->available_stock < $item->quantity) {
+                    throw new Exception("Insufficient stock for {$item->medicine->name}. Available: {$item->medicine->available_stock}, Required: {$item->quantity}");
                 }
             }
 
@@ -114,7 +115,7 @@ class CartService
                 'order_no' => $orderNo,
                 'order_date' => now()->toDateString(),
                 'total_amount' => $total,
-                'status' => 'pending',
+                'status' => OrderStatus::Pending,
                 'remarks' => null,
             ]);
 

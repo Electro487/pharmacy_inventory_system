@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Order;
 use App\Models\Customer;
 use App\Models\Sale;
+use App\Enums\OrderStatus;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Services\SaleService;
@@ -46,7 +47,7 @@ class OrderService
     {
         return DB::transaction(function () use ($order) {
             // Prevent approving non-pending orders
-            if ($order->status !== 'pending') {
+            if ($order->status !== OrderStatus::Pending) {
                 throw new Exception('Only pending orders can be approved.');
             }
 
@@ -63,11 +64,11 @@ class OrderService
                 throw new Exception('Cannot approve an order with no items.');
             }
 
-            // Check stock again
+            // Check available stock again (pending orders reserved stock)
             foreach ($order->items as $item) {
                 $medicine = $item->medicine;
-                if ($medicine->stock < $item->quantity) {
-                    throw new Exception("Insufficient stock for {$medicine->name}. Available: {$medicine->stock}, Required: {$item->quantity}");
+                if ($medicine->available_stock < $item->quantity) {
+                    throw new Exception("Insufficient stock for {$medicine->name}. Available: {$medicine->available_stock}, Required: {$item->quantity}");
                 }
             }
 
@@ -76,7 +77,7 @@ class OrderService
 
             // Update Order with sale_id
             $order->update([
-                'status' => 'approved',
+                'status' => OrderStatus::Approved,
                 'approved_by' => Auth::id(),
                 'approved_at' => now(),
                 'sale_id' => $sale->id,
@@ -89,12 +90,12 @@ class OrderService
     public function reject(Order $order): Order
     {
         return DB::transaction(function () use ($order) {
-            if ($order->status !== 'pending') {
+            if ($order->status !== OrderStatus::Pending) {
                 throw new Exception('Only pending orders can be rejected.');
             }
 
             $order->update([
-                'status' => 'rejected',
+                'status' => OrderStatus::Rejected,
                 'approved_by' => Auth::id(),
                 'approved_at' => now(),
             ]);

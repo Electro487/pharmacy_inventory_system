@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Enums\OrderStatus;
 
 class Order extends Model
 {
@@ -20,6 +21,11 @@ class Order extends Model
         'approved_by',
         'approved_at',
         'sale_id',
+    ];
+
+    protected $casts = [
+        'status' => OrderStatus::class,
+        'approved_at' => 'datetime',
     ];
 
     public function customer()

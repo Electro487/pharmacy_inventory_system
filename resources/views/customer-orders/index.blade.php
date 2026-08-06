@@ -34,8 +34,8 @@
                     Rs. {{ number_format($order->total_amount, 2) }}
                 </td>
                 <td>
-                    <span class="status-badge status-{{ $order->status }}">
-                        {{ ucfirst($order->status) }}
+                    <span class="status-badge status-{{ $order->status->value }}">
+                        {{ ucfirst($order->status->value) }}
                     </span>
                 </td>
                 <td>

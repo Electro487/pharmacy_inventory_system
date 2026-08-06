@@ -17,9 +17,9 @@
     <div class="medicine-info" style="background: var(--aqua-base); border-radius: 8px; padding: 20px; margin-bottom: 24px;">
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
             <div>
-                <strong>Stock:</strong>
-                <div style="color: {{ $medicine->stock < 10 ? '#dc2626' : '#166534' }}; font-weight: 600;">
-                    {{ $medicine->stock }} {{ $medicine->unit->name }}(s) available
+                <strong>Available Stock:</strong>
+                <div style="color: {{ $medicine->available_stock < 10 ? '#dc2626' : '#166534' }}; font-weight: 600;">
+                    {{ $medicine->available_stock }} {{ $medicine->unit->name }}(s)
                 </div>
             </div>
             <div>

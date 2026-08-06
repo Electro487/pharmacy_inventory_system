@@ -6,6 +6,7 @@ use App\Models\Sale;
 use App\Models\SaleItem;
 use App\Models\User;
 use App\Models\Order;
+use App\Enums\PaymentStatus;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Customer;
@@ -67,7 +68,7 @@ class SaleService
                 'invoice_no' => $invoiceNo,
                 'sale_date' => now()->toDateString(),
                 'total_amount' => $order->total_amount,
-                'payment_status' => 'paid',
+                'payment_status' => PaymentStatus::Paid,
                 'remarks' => $order->remarks,
             ]);
 

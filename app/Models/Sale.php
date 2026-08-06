@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Enums\PaymentStatus;
 
 class Sale extends Model
 {
@@ -17,6 +18,10 @@ class Sale extends Model
         'total_amount',
         'payment_status',
         'remarks',
+    ];
+
+    protected $casts = [
+        'payment_status' => PaymentStatus::class,
     ];
 
 

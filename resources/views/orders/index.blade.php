@@ -26,13 +26,13 @@
             <td>{{ $order->order_date }}</td>
             <td>{{ number_format($order->total_amount, 2) }}</td>
             <td>
-                <span class="status-badge status-{{ $order->status }}">
-                    {{ ucfirst($order->status) }}
+                <span class="status-badge status-{{ $order->status->value }}">
+                    {{ ucfirst($order->status->value) }}
                 </span>
             </td>
             <td>
                 <a href="{{ route('orders.show', $order) }}" class="btn btn-secondary btn-sm">View</a>
-                @if($order->status === 'pending')
+                @if($order->status === \App\Enums\OrderStatus::Pending)
                     <form action="{{ route('orders.approve', $order) }}" method="POST" style="display:inline;">
                         @csrf
                         @method('PATCH')

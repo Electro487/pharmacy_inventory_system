@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
+use App\Enums\OrderStatus;
 
 class Medicine extends Model
 {
@@ -52,5 +54,16 @@ class Medicine extends Model
     {
         $latest = $this->purchaseItems()->latest('id')->first();
         return $latest ? $latest->purchase_price : null;
+    }
+
+    public function getAvailableStockAttribute()
+    {
+        $reserved = DB::table('order_items')
+            ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->where('order_items.medicine_id', $this->id)
+            ->where('orders.status', OrderStatus::Pending)
+            ->sum('order_items.quantity');
+
+        return max(0, $this->stock - $reserved);
     }
 }

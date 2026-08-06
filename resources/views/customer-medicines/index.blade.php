@@ -22,8 +22,8 @@
                 ${{ number_format($medicine->selling_price, 2) }}
             </div>
 
-            <div class="medicine-stock" style="font-size: 0.8rem; color: {{ $medicine->stock < 10 ? '#dc2626' : '#166534' }}; margin-bottom: 16px;">
-                {{ $medicine->stock }} in stock
+            <div class="medicine-stock" style="font-size: 0.8rem; color: {{ $medicine->available_stock < 10 ? '#dc2626' : '#166534' }}; margin-bottom: 16px;">
+                {{ $medicine->available_stock }} available
             </div>
 
             <form action="{{ route('customer.cart.add') }}" method="POST">

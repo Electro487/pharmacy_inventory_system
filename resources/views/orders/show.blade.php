@@ -12,7 +12,7 @@
         <div class="invoice-meta">
             <div><strong>Date:</strong> {{ $order->order_date }}</div>
             <div><strong>Customer:</strong> {{ $order->customer->name }}</div>
-            <div><strong>Status:</strong> <span class="status-badge status-{{ $order->status }}">{{ ucfirst($order->status) }}</span></div>
+            <div><strong>Status:</strong> <span class="status-badge status-{{ $order->status->value }}">{{ ucfirst($order->status->value) }}</span></div>
             @if($order->approved_by)
             <div><strong>Approved By:</strong> {{ $order->approver->name }}</div>
             <div><strong>Approved At:</strong> {{ $order->approved_at }}</div>
@@ -59,7 +59,7 @@
     </div>
 
     <div class="invoice-actions">
-        @if($order->status === 'pending')
+        @if($order->status === \App\Enums\OrderStatus::Pending)
             <form action="{{ route('orders.approve', $order) }}" method="POST" style="display:inline;">
                 @csrf
                 @method('PATCH')
