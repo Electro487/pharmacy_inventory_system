@@ -47,4 +47,14 @@ class OrderController extends Controller
             return redirect()->route('orders.show', $order)->with('error', $e->getMessage());
         }
     }
+
+    public function complete(Order $order)
+    {
+        try {
+            $this->orderService->complete($order);
+            return redirect()->route('orders.show', $order)->with('success', 'Order marked as completed.');
+        } catch (\Exception $e) {
+            return redirect()->route('orders.show', $order)->with('error', $e->getMessage());
+        }
+    }
 }

@@ -83,6 +83,19 @@
             </form>
         @endif
 
+        @if($order->status === \App\Enums\OrderStatus::Approved)
+            <form action="{{ route('orders.complete', $order) }}" method="POST" style="display:inline;">
+                @csrf
+                @method('PATCH')
+                <button type="submit" class="btn btn-primary" onclick="return confirm('Mark this order as completed?')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 6px;">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    Mark as Completed
+                </button>
+            </form>
+        @endif
+
         <button class="btn btn-primary" onclick="window.print()">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 6px;">
                 <path d="M6 9V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v7"/>

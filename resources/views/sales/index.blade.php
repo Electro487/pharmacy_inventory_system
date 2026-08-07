@@ -25,7 +25,11 @@
                 <td>{{ $sale->invoice_no }}</td>
                 <td>{{ $sale->sale_date }}</td>
                 <td>{{ number_format($sale->total_amount, 2) }}</td>
-                <td>{{ ucfirst($sale->payment_status->value) }}</td>
+                <td>
+                    <span class="status-badge status-{{ $sale->payment_status->value }}">
+                        {{ ucfirst($sale->payment_status->value) }}
+                    </span>
+                </td>
                 <td>
                     <a href="{{ route('sales.show', $sale) }}" class="btn btn-secondary btn-sm">View</a>
                 </td>

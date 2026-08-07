@@ -64,11 +64,19 @@ class OrderService
                 throw new Exception('Cannot approve an order with no items.');
             }
 
-            // Check available stock again (pending orders reserved stock)
+            // Check available stock again, excluding THIS order's reservation
             foreach ($order->items as $item) {
                 $medicine = $item->medicine;
-                if ($medicine->available_stock < $item->quantity) {
-                    throw new Exception("Insufficient stock for {$medicine->name}. Available: {$medicine->available_stock}, Required: {$item->quantity}");
+                $reserved = DB::table('order_items')
+                    ->join('orders', 'order_items.order_id', '=', 'orders.id')
+                    ->where('order_items.medicine_id', $medicine->id)
+                    ->where('orders.status', OrderStatus::Pending)
+                    ->where('orders.id', '!=', $order->id)
+                    ->sum('order_items.quantity');
+
+                $available = max(0, $medicine->stock - $reserved);
+                if ($available < $item->quantity) {
+                    throw new Exception("Insufficient stock for {$medicine->name}. Available: {$available}, Required: {$item->quantity}");
                 }
             }
 
@@ -102,5 +110,18 @@ class OrderService
 
             return $order->fresh();
         });
+    }
+
+    public function complete(Order $order): Order
+    {
+        if ($order->status !== OrderStatus::Approved) {
+            throw new Exception('Only approved orders can be marked as completed.');
+        }
+
+        $order->update([
+            'status' => OrderStatus::Completed,
+        ]);
+
+        return $order->fresh();
     }
 }

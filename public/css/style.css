@@ -617,6 +617,26 @@ aside a:hover {
     color: #991b1b;
 }
 
+.status-approved {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-rejected {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.status-completed {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.status-unpaid {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
 .invoice-table-container {
     overflow-x: auto;
     margin-bottom: 24px;

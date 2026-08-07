@@ -44,16 +44,17 @@ Route::middleware('role:Admin,Pharmacist')->group(function () {
     Route::resource('medicines', MedicineController::class);
     Route::resource('suppliers', SupplierController::class);
     Route::resource('purchases', PurchaseController::class);
+});
+
+// Everyone (Admin, Pharmacist, Cashier)
+Route::middleware('role:Admin,Pharmacist,Cashier')->group(function () {
+    Route::resource('customers', CustomerController::class)->except(['create', 'store']);
+    Route::resource('sales', SaleController::class)->only(['index', 'show']);
     Route::resource('orders', OrderController::class)->only(['index', 'show']);
     Route::patch('orders/{order}/approve', [OrderController::class, 'approve'])->name('orders.approve');
     Route::patch('orders/{order}/reject', [OrderController::class, 'reject'])->name('orders.reject');
+    Route::patch('orders/{order}/complete', [OrderController::class, 'complete'])->name('orders.complete');
 });
-
-    // Everyone (Admin, Pharmacist, Cashier)
-    Route::middleware('role:Admin,Pharmacist,Cashier')->group(function () {
-        Route::resource('customers', CustomerController::class)->except(['create', 'store']);
-        Route::resource('sales', SaleController::class)->only(['index', 'show']);
-    });
 });
 
 Route::prefix('customer')
