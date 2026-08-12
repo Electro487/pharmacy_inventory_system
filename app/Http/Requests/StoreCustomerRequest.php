@@ -17,7 +17,7 @@ class StoreCustomerRequest extends FormRequest
             'name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:20|regex:/^\+?[0-9\s\-\(\)]{7,20}$/',
             'email' => 'required|email|max:255|unique:customers,email',
-            'password' => ['required', 'confirmed', 'min:8', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/'],
+            'password' => ['required', 'confirmed', 'min:8', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/'],
             'address' => 'nullable|string|max:1000',
             'status' => 'nullable|boolean',
         ];

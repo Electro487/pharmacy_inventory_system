@@ -30,7 +30,7 @@ class UpdateUserRequest extends FormRequest
                 'email',
                 Rule::unique('users', 'email')->ignore($this->route('user')),
             ],
-            'password' => 'nullable|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/',
+            'password' => 'nullable|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/',
             'status' => 'nullable|boolean',
         ];
     }

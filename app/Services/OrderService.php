@@ -9,6 +9,8 @@ use App\Enums\OrderStatus;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Services\SaleService;
+use App\Notifications\OrderApprovedNotification;
+use App\Notifications\OrderRejectedNotification;
 use Exception;
 
 class OrderService
@@ -91,6 +93,10 @@ class OrderService
                 'sale_id' => $sale->id,
             ]);
 
+            $order->customer->notify(
+                new OrderApprovedNotification($order)
+            );
+
             return $order->fresh();
         });
     }
@@ -107,6 +113,10 @@ class OrderService
                 'approved_by' => Auth::id(),
                 'approved_at' => now(),
             ]);
+
+            $order->customer->notify(
+                new OrderRejectedNotification($order)
+            );
 
             return $order->fresh();
         });

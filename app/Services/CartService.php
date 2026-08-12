@@ -9,6 +9,8 @@ use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Enums\OrderStatus;
+use App\Models\User;
+use App\Notifications\NewOrderNotification;
 use Illuminate\Support\Facades\DB;
 use Exception;
 
@@ -128,6 +130,16 @@ class CartService
                     'selling_price' => $item->medicine->selling_price,
                     'subtotal' => $item->medicine->selling_price * $item->quantity,
                 ]);
+            }
+
+            $cashiers = User::whereHas('role', function ($query) {
+                $query->where('name', 'Cashier');
+            })
+            ->where('status', true)
+            ->get();
+
+            foreach ($cashiers as $cashier) {
+                $cashier->notify(new NewOrderNotification($order));
             }
 
             // Clear cart
