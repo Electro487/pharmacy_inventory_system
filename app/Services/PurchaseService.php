@@ -6,12 +6,13 @@ use App\Models\Purchase;
 use App\Models\PurchaseItem;
 use App\Models\Medicine;
 use Illuminate\Support\Facades\DB;
+use Exception;
 
 class PurchaseService
 {
     public function getAll()
     {
-        return Purchase::with('supplier')
+        return Purchase::with(['supplier', 'items.medicine'])
             ->latest()
             ->paginate(10);
     }
@@ -75,7 +76,7 @@ class PurchaseService
                 ]);
             }
 
-            return $purchase;
+            return $purchase->load(['supplier', 'items.medicine']);
         });
     }
 }

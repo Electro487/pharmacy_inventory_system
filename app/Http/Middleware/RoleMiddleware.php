@@ -16,10 +16,22 @@ class RoleMiddleware
     public function handle($request, Closure $next, ...$roles)
     {
         if (!auth()->check()) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'message' => 'Unauthenticated.'
+                ], 401);
+            }
+
             abort(403);
         }
 
-        if (!in_array(auth()->user()->role->name, $roles)) {
+        if (!auth()->user()->role || !in_array(auth()->user()->role->name, $roles)) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'message' => 'Forbidden. You do not have permission to access this resource.'
+                ], 403);
+            }
+
             abort(403);
         }
 

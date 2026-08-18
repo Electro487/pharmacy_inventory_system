@@ -12,6 +12,11 @@ class UserService {
             ->paginate(10);
     }
 
+    public function getById(int $id): User
+    {
+        return User::with('role')->findOrFail($id);
+    }
+
     public function create(array $data): User 
     {
         $data['password'] = Hash::make($data['password']);
