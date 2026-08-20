@@ -23,6 +23,7 @@ class SaleController extends Controller
         $sales = $this->saleService->getAll(Auth::user());
 
         return response()->json([
+            'message' => 'Sales retrieved successfully.',
             'sales' => SaleResource::collection($sales),
         ]);
     }
@@ -38,6 +39,7 @@ class SaleController extends Controller
         }
 
         return response()->json([
+            'message' => 'Sale retrieved successfully.',
             'sale' => new SaleResource($sale),
         ]);
     }

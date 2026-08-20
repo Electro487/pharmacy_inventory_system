@@ -24,6 +24,7 @@ class SupplierController extends Controller
         $suppliers = $this->supplierService->getAll();
 
         return response()->json([
+            'message' => 'Suppliers retrieved successfully.',
             'suppliers' => SupplierResource::collection($suppliers),
         ]);
     }
@@ -31,6 +32,7 @@ class SupplierController extends Controller
     public function show(Supplier $supplier): JsonResponse
     {
         return response()->json([
+            'message' => 'Supplier retrieved successfully.',
             'supplier' => new SupplierResource($supplier),
         ]);
     }

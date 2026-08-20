@@ -23,6 +23,7 @@ class PurchaseController extends Controller
         $purchases = $this->purchaseService->getAll();
 
         return response()->json([
+            'message' => 'Purchases retrieved successfully.',
             'purchases' => PurchaseResource::collection($purchases),
         ]);
     }
@@ -32,6 +33,7 @@ class PurchaseController extends Controller
         $purchase->load(['supplier', 'items.medicine']);
 
         return response()->json([
+            'message' => 'Purchase retrieved successfully.',
             'purchase' => new PurchaseResource($purchase),
         ]);
     }

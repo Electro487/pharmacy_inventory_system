@@ -20,6 +20,7 @@ class SaleController extends Controller
             ->get();
 
         return response()->json([
+            'message' => 'Sales retrieved successfully.',
             'sales' => CustomerSaleResource::collection($sales),
         ]);
     }
@@ -35,6 +36,7 @@ class SaleController extends Controller
         }
 
         return response()->json([
+            'message' => 'Sale retrieved successfully.',
             'sale' => new CustomerSaleResource(
                 $sale->load('items.medicine')
             ),

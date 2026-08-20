@@ -24,6 +24,7 @@ class UserController extends Controller
         $users = $this->userService->getAll();
 
         return response()->json([
+            'message' => 'Users retrieved successfully.',
             'users' => UserResource::collection($users),
         ]);
     }
@@ -33,6 +34,7 @@ class UserController extends Controller
         $user = $this->userService->getById($user->id);
 
         return response()->json([
+            'message' => 'User retrieved successfully.',
             'user' => new UserResource($user),
         ]);
     }

@@ -28,6 +28,7 @@ class OrderController extends Controller
             ->get();
 
         return response()->json([
+            'message' => 'Orders retrieved successfully.',
             'orders' => OrderResource::collection($orders),
         ]);
     }
@@ -43,6 +44,7 @@ class OrderController extends Controller
         }
 
         return response()->json([
+            'message' => 'Order retrieved successfully.',
             'order' => new OrderResource(
                 $order->load('items.medicine')
             ),

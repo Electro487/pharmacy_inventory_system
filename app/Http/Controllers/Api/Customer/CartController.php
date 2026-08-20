@@ -24,9 +24,10 @@ class CartController extends Controller
         $customer = $request->user();
         $cart = $this->cartService->getCart($customer);
 
-        return response()->json(
-            new CartResource($cart)
-        );
+        return response()->json([
+            'message' => 'Cart retrieved successfully.',
+            'cart' => new CartResource($cart),
+        ]);
     }
 
     public function add(CartAddRequest $request): JsonResponse

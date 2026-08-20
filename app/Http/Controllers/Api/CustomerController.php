@@ -23,6 +23,7 @@ class CustomerController extends Controller
         $customers = $this->customerService->getAll();
 
         return response()->json([
+            'message' => 'Customers retrieved successfully.',
             'customers' => CustomerResource::collection($customers),
         ]);
     }
@@ -30,6 +31,7 @@ class CustomerController extends Controller
     public function show(Customer $customer): JsonResponse
     {
         return response()->json([
+            'message' => 'Customer retrieved successfully.',
             'customer' => new CustomerResource($customer),
         ]);
     }

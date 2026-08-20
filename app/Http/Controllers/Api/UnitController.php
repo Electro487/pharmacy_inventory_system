@@ -24,6 +24,7 @@ class UnitController extends Controller
         $units = $this->unitService->getAll();
 
         return response()->json([
+            'message' => 'Units retrieved successfully.',
             'units' => UnitResource::collection($units),
         ]);
     }
@@ -31,6 +32,7 @@ class UnitController extends Controller
     public function show(Unit $unit): JsonResponse
     {
         return response()->json([
+            'message' => 'Unit retrieved successfully.',
             'unit' => new UnitResource($unit),
         ]);
     }

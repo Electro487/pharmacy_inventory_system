@@ -23,6 +23,7 @@ class CategoryController extends Controller
         $categories = $this->categoryService->getAll();
 
         return response()->json([
+            'message' => 'Categories retrieved successfully.',
             'categories' => CategoryResource::collection($categories),
         ]);
     }
@@ -30,6 +31,7 @@ class CategoryController extends Controller
     public function show(Category $category): JsonResponse
     {
         return response()->json([
+            'message' => 'Category retrieved successfully.',
             'category' => new CategoryResource($category),
         ]);
     }

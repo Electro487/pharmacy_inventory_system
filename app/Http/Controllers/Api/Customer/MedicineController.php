@@ -14,7 +14,10 @@ class MedicineController extends Controller
             ->where('status', true)
             ->get();
 
-        return CustomerMedicineResource::collection($medicines);
+        return response()->json([
+            'message' => 'Medicines retrieved successfully.',
+            'medicines' => CustomerMedicineResource::collection($medicines),
+        ]);
     }
 
     public function show(Medicine $medicine)
@@ -25,8 +28,11 @@ class MedicineController extends Controller
             ], 404);
         }
 
-        return new CustomerMedicineResource(
-            $medicine->load(['category', 'unit'])
-        );
+        return response()->json([
+            'message' => 'Medicine retrieved successfully.',
+            'medicine' => new CustomerMedicineResource(
+                $medicine->load(['category', 'unit'])
+            ),
+        ]);
     }
 }

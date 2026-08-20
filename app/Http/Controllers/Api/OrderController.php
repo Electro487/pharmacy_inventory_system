@@ -24,6 +24,7 @@ class OrderController extends Controller
         $orders = $this->orderService->getAll();
 
         return response()->json([
+            'message' => 'Orders retrieved successfully.',
             'orders' => OrderResource::collection($orders),
         ]);
     }
@@ -33,6 +34,7 @@ class OrderController extends Controller
         $order = $this->orderService->getById($order->id);
 
         return response()->json([
+            'message' => 'Order retrieved successfully.',
             'order' => new OrderResource($order),
         ]);
     }
