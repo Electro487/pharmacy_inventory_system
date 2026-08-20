@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\Customer\MedicineController as CustomerMedicineController;
 use App\Http\Controllers\Api\Customer\CartController;
 use App\Http\Controllers\Api\Customer\OrderController as CustomerOrderController;
+use App\Http\Controllers\Api\Customer\SaleController as CustomerSaleController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\UnitController;
 use App\Http\Controllers\Api\SupplierController;
@@ -79,6 +80,10 @@ Route::prefix('v1')->group(function () {
             Route::get('/purchases', [PurchaseController::class, 'index']);
             Route::get('/purchases/{purchase}', [PurchaseController::class, 'show']);
             Route::post('/purchases', [PurchaseController::class, 'store']);
+
+            // Orders
+            Route::patch('/orders/{order}/approve', [OrderController::class, 'approve']);
+            Route::patch('/orders/{order}/reject', [OrderController::class, 'reject']);
         });
 
 
@@ -88,9 +93,6 @@ Route::prefix('v1')->group(function () {
             // Orders
             Route::get('/orders', [OrderController::class, 'index']);
             Route::get('/orders/{order}', [OrderController::class, 'show']);
-            Route::patch('/orders/{order}/approve', [OrderController::class, 'approve']);
-            Route::patch('/orders/{order}/reject', [OrderController::class, 'reject']);
-            Route::patch('/orders/{order}/complete', [OrderController::class, 'complete']);
 
             // Sales
             Route::get('/sales', [SaleController::class, 'index']);
@@ -101,6 +103,14 @@ Route::prefix('v1')->group(function () {
             Route::get('/customers/{customer}', [CustomerController::class, 'show']);
             Route::put('/customers/{customer}', [CustomerController::class, 'update']);
             Route::delete('/customers/{customer}', [CustomerController::class, 'destroy']);
+        });
+
+
+        // Cashier Only
+        Route::middleware('role:Cashier')->group(function () {
+
+            // Orders
+            Route::patch('/orders/{order}/complete', [OrderController::class, 'complete']);
         });
 
 
@@ -126,6 +136,10 @@ Route::prefix('v1')->group(function () {
 
             // Checkout
             Route::post('/checkout', [CustomerOrderController::class, 'checkout']);
+
+            // Sales (Bills)
+            Route::get('/sales', [CustomerSaleController::class, 'index']);
+            Route::get('/sales/{sale}', [CustomerSaleController::class, 'show']);
         });
     });
 });

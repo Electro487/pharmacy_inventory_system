@@ -2,12 +2,14 @@
 
 namespace App\Helpers;
 
+use App\Models\Order;
+
 trait GeneratesOrderNumbers
 {
     private function generateOrderNumber(): string
     {
-        $lastOrder = \App\Models\Order::latest('id')->first();
-
+        $lastOrder = Order::latest('id')->first();
+// $id = $latestOrder->id;
         if (!$lastOrder) {
             return 'ORD-000001';
         }

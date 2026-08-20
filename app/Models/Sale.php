@@ -16,12 +16,19 @@ class Sale extends Model
         'invoice_no',
         'sale_date',
         'total_amount',
+        'subtotal',
+        'vat_rate',
+        'vat_amount',
         'payment_status',
         'remarks',
     ];
 
     protected $casts = [
         'payment_status' => PaymentStatus::class,
+        'subtotal' => 'decimal:2',
+        'vat_rate' => 'decimal:2',
+        'vat_amount' => 'decimal:2',
+        'total_amount' => 'decimal:2',
     ];
 
 

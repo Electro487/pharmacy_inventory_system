@@ -50,9 +50,9 @@ class SaleService
         return 'SAL-' . str_pad($number, 6, '0', STR_PAD_LEFT);
     }
 
-    public function createFromOrder(Order $order): Sale
+    public function createFromOrder(Order $order, float $vatRate = 0): Sale
     {
-        return DB::transaction(function () use ($order) {
+        return DB::transaction(function () use ($order, $vatRate) {
             $order->load('items.medicine');
 
             if ($order->items->isEmpty()) {
@@ -61,13 +61,20 @@ class SaleService
 
             $invoiceNo = $this->generateInvoiceNumber();
 
+            $subtotal = round($order->items->sum('subtotal'), 2);
+            $vatAmount = round($subtotal * ($vatRate / 100), 2);
+            $total = $subtotal + $vatAmount;
+
             // Create Sale first
             $sale = Sale::create([
                 'customer_id' => $order->customer_id,
                 'user_id' => Auth::id(),
                 'invoice_no' => $invoiceNo,
                 'sale_date' => now()->toDateString(),
-                'total_amount' => $order->total_amount,
+                'total_amount' => $total,
+                'subtotal' => $subtotal,
+                'vat_rate' => $vatRate,
+                'vat_amount' => $vatAmount,
                 'payment_status' => PaymentStatus::Paid,
                 'remarks' => $order->remarks,
             ]);

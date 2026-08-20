@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Order;
 use App\Models\Customer;
 use App\Models\Sale;
+use App\Models\OrderItem;
 use App\Enums\OrderStatus;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -69,12 +70,12 @@ class OrderService
             // Check available stock again, excluding THIS order's reservation
             foreach ($order->items as $item) {
                 $medicine = $item->medicine;
-                $reserved = DB::table('order_items')
-                    ->join('orders', 'order_items.order_id', '=', 'orders.id')
-                    ->where('order_items.medicine_id', $medicine->id)
-                    ->where('orders.status', OrderStatus::Pending)
-                    ->where('orders.id', '!=', $order->id)
-                    ->sum('order_items.quantity');
+                $reserved = OrderItem::where('medicine_id', $medicine->id)
+                    ->whereHas('order', function ($query) use ($order) {
+                        $query->where('status', OrderStatus::Pending)
+                            ->where('id', '!=', $order->id);
+                    })
+                    ->sum('quantity');
 
                 $available = max(0, $medicine->stock - $reserved);
                 if ($available < $item->quantity) {
@@ -82,15 +83,11 @@ class OrderService
                 }
             }
 
-            // Delegate to SaleService and get the created sale
-            $sale = $this->saleService->createFromOrder($order);
-
-            // Update Order with sale_id
+            // Approve order (sale is created later on completion)
             $order->update([
                 'status' => OrderStatus::Approved,
                 'approved_by' => Auth::id(),
                 'approved_at' => now(),
-                'sale_id' => $sale->id,
             ]);
 
             $order->customer->notify(
@@ -122,16 +119,49 @@ class OrderService
         });
     }
 
-    public function complete(Order $order): Order
+    public function complete(Order $order, float $vatRate = 0): Order
     {
-        if ($order->status !== OrderStatus::Approved) {
-            throw new Exception('Only approved orders can be marked as completed.');
-        }
+        return DB::transaction(function () use ($order, $vatRate) {
+            if ($order->status !== OrderStatus::Approved) {
+                throw new Exception('Only approved orders can be marked as completed.');
+            }
 
-        $order->update([
-            'status' => OrderStatus::Completed,
-        ]);
+            // Prevent double sale creation
+            if ($order->sale_id) {
+                throw new Exception('Sale already exists for this order.');
+            }
 
-        return $order->fresh();
+            $order->load('items.medicine');
+
+            if ($order->items->isEmpty()) {
+                throw new Exception('Cannot complete an order with no items.');
+            }
+
+            // Check available stock again, excluding THIS order's reservation
+            foreach ($order->items as $item) {
+                $medicine = $item->medicine;
+                $reserved = OrderItem::where('medicine_id', $medicine->id)
+                    ->whereHas('order', function ($query) use ($order) {
+                        $query->where('status', OrderStatus::Pending)
+                            ->where('id', '!=', $order->id);
+                    })
+                    ->sum('quantity');
+
+                $available = max(0, $medicine->stock - $reserved);
+                if ($available < $item->quantity) {
+                    throw new Exception("Insufficient stock for {$medicine->name}. Available: {$available}, Required: {$item->quantity}");
+                }
+            }
+
+            // Create the Sale/Bill (also deducts stock)
+            $sale = $this->saleService->createFromOrder($order, $vatRate);
+
+            $order->update([
+                'status' => OrderStatus::Completed,
+                'sale_id' => $sale->id,
+            ]);
+
+            return $order->fresh();
+        });
     }
 }

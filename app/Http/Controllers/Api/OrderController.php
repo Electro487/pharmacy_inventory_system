@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Services\OrderService;
+use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Resources\OrderResource;
+use App\Http\Resources\SaleResource;
 
 class OrderController extends Controller
 {
@@ -41,10 +43,11 @@ class OrderController extends Controller
             $order = $this->orderService->approve($order);
 
             return response()->json([
-                'message' => 'Order approved and sale created.',
+                'message' => 'Order approved successfully.',
                 'order' => new OrderResource($order),
             ]);
         } catch (\Exception $e) {
+            // \Log 
             return response()->json([
                 'message' => $e->getMessage(),
             ], 422);
@@ -67,14 +70,26 @@ class OrderController extends Controller
         }
     }
 
-    public function complete(Order $order): JsonResponse
+    public function complete(Request $request, Order $order): JsonResponse
     {
         try {
-            $order = $this->orderService->complete($order);
+            $data = $request->validate([
+                'vat_rate' => ['nullable', 'numeric', 'in:0,13'],
+            ], [
+                'vat_rate.in' => 'VAT rate must be either 0 (no VAT) or 13 percent.',
+            ]);
+
+            $vatRate = $data['vat_rate'] ?? 0;
+            $order = $this->orderService->complete($order, $vatRate);
+
+            $sale = $order->load('sale')
+                ->sale
+                ->load('items.medicine');
 
             return response()->json([
                 'message' => 'Order marked as completed.',
                 'order' => new OrderResource($order),
+                'sale' => new SaleResource($sale),
             ]);
         } catch (\Exception $e) {
             return response()->json([
